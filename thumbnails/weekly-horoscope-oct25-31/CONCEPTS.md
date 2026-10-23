@@ -27,7 +27,20 @@ under YouTube's 2 MB limit). Regenerate or tweak with:
   Great Red Spot, lit from the text side so the planet's bright limb points at
   the headline.
 
-## Variant A — "Jupiter on the Wheel" (recommended default)
+## Variant D — Channel style (recommended, matches the existing thumbnails)
+
+Built to match the channel's established look (presenter cut out on the left
+with a warm edge glow, gold date pill, bevelled mixed-case headline, dark
+"For All 12 Signs" pill, mascot art on the right). Layout: date pill →
+"Weekly Horoscope" (cream bevel) → giant gold "JUPITER" with a red BIG
+TRANSIT tag → "in LEO" → "For All 12 Signs" pill. Jupiter sits top-right, a
+golden sun-mane Leo emblem bottom-right.
+
+The presenter cut-out lives in `thumbnails/assets/host_cutout.png` (extracted
+from an earlier thumbnail with rembg). Replace that file with a new cut-out to
+change the pose/outfit; the script scales it to the layout automatically.
+
+## Variant A — "Jupiter on the Wheel"
 
 Left: date pill → WEEKLY HOROSCOPE → giant gold JUPITER / IN LEO ♌ → gold
 ALL 12 SIGNS bar → strip of all twelve glyphs. Right: large Jupiter inside a
@@ -61,8 +74,8 @@ the "Jupiter in Leo" hook is secondary to "my sign this week".
 
 ## Suggested A/B plan
 
-1. Publish with **A**. It carries the most specific hook (the transit) and the
-   wheel differentiates it from generic weekly-horoscope thumbnails.
+1. Publish with **D**: it keeps the channel's recognisable face-left format,
+   which returning subscribers scan for.
 2. If CTR is below the channel's weekly-video average after ~48 h, swap to
    **B** (strongest silhouette) for the next 48 h.
 3. Keep **C** for the Community post / Shorts teaser, where the row of signs

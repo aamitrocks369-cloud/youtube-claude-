@@ -664,12 +664,192 @@ def variant_c(out):
     finish(canvas, out)
 
 
-VARIANTS = {"a": variant_a, "b": variant_b, "c": variant_c}
+# ----------------------------------------------------------------------------- channel style
+HOST_CUTOUT = os.path.join(HERE, "assets", "host_cutout.png")
+
+
+def bevel_text(canvas, xy, text, fnt, stops, stroke, stroke_color, glow=None, glow_radius=0,
+               glow_strength=1.0, anchor="la", bevel=3, shadow=(0, 8), shadow_blur=10, shadow_alpha=190):
+    """Gradient text with outline, drop shadow, outer glow and a simple emboss bevel."""
+    bbox = fancy_text(canvas, xy, text, fnt, stops=stops, stroke=stroke, stroke_color=stroke_color,
+                      shadow=(shadow[0] * S, shadow[1] * S), shadow_blur=shadow_blur * S,
+                      shadow_alpha=shadow_alpha, glow=glow, glow_radius=glow_radius,
+                      glow_strength=glow_strength, anchor=anchor)
+    if bbox is None or not bevel:
+        return bbox
+    size = canvas.size
+    m = text_mask(size, xy, text, fnt, 0, anchor)
+    b = int(bevel * S)
+    hi = ImageChops.subtract(m, ImageChops.offset(m, b, b))        # top-left edges
+    lo = ImageChops.subtract(m, ImageChops.offset(m, -b, -b))      # bottom-right edges
+    hi = hi.filter(ImageFilter.GaussianBlur(0.6 * S)).point(lambda v: int(v * 0.75))
+    lo = lo.filter(ImageFilter.GaussianBlur(0.6 * S)).point(lambda v: int(v * 0.55))
+    layer = Image.new("RGBA", size, (255, 255, 240, 0))
+    layer.putalpha(hi)
+    canvas.alpha_composite(layer)
+    layer = Image.new("RGBA", size, (70, 30, 0, 0))
+    layer.putalpha(lo)
+    canvas.alpha_composite(layer)
+    return bbox
+
+
+def gold_pill(text, fnt, pad_x, pad_y, tracking=0, text_fill=(26, 16, 60, 255), border=True):
+    tw = tracked_width(text, fnt, tracking)
+    asc, desc = fnt.getmetrics()
+    th = asc + desc
+    w, h = int(tw + 2 * pad_x), int(th + 2 * pad_y)
+    m = 70
+    img = Image.new("RGBA", (w + 2 * m, h + 2 * m), (0, 0, 0, 0))
+    r = int(26 * S)
+    mask = Image.new("L", img.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([m, m, m + w, m + h], r, fill=255)
+    img.alpha_composite(glow_layer(mask, (255, 200, 80), 22 * S, 0.9))
+    sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle([m + 4 * S, m + 8 * S, m + w + 4 * S, m + h + 8 * S], r, fill=(0, 0, 0, 170))
+    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(10 * S)))
+    grad = vgradient_image(w, h, [(0, (255, 236, 150)), (0.45, (255, 200, 70)), (0.55, (250, 180, 40)), (1, (214, 140, 20))])
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    layer.paste(grad, (m, m))
+    inner = Image.new("L", img.size, 0)
+    ImageDraw.Draw(inner).rounded_rectangle([m, m, m + w, m + h], r, fill=255)
+    layer.putalpha(inner)
+    img.alpha_composite(layer)
+    d = ImageDraw.Draw(img)
+    if border:
+        d.rounded_rectangle([m, m, m + w, m + h], r, outline=(255, 250, 220, 255), width=int(3 * S))
+        d.rounded_rectangle([m + 5 * S, m + 5 * S, m + w - 5 * S, m + h - 5 * S], r - int(5 * S),
+                            outline=(150, 90, 10, 160), width=int(2 * S))
+    # text shadow + text
+    tracked_text(d, (m + pad_x + 2 * S, m + pad_y + asc + 3 * S), text, fnt, (120, 70, 0, 120), tracking)
+    tracked_text(d, (m + pad_x, m + pad_y + asc), text, fnt, text_fill, tracking)
+    return img
+
+
+def navy_pill(text, fnt, pad_x, pad_y, tracking=0):
+    """Dark pill with gold border and cream bevelled text (the 'For All 12 Signs' bar)."""
+    tw = tracked_width(text, fnt, tracking)
+    asc, desc = fnt.getmetrics()
+    th = asc + desc
+    w, h = int(tw + 2 * pad_x), int(th + 2 * pad_y)
+    m = 70
+    img = Image.new("RGBA", (w + 2 * m, h + 2 * m), (0, 0, 0, 0))
+    r = int(30 * S)
+    mask = Image.new("L", img.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([m, m, m + w, m + h], r, fill=255)
+    img.alpha_composite(glow_layer(mask, (255, 190, 70), 26 * S, 0.9))
+    grad = vgradient_image(w, h, [(0, (40, 22, 90)), (1, (14, 8, 40))])
+    layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    layer.paste(grad, (m, m))
+    inner = Image.new("L", img.size, 0)
+    ImageDraw.Draw(inner).rounded_rectangle([m, m, m + w, m + h], r, fill=235)
+    layer.putalpha(inner)
+    img.alpha_composite(layer)
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([m, m, m + w, m + h], r, outline=(255, 214, 110, 255), width=int(5 * S))
+    fancy_text(img, (m + pad_x, m + pad_y + asc), text, fnt,
+               stops=[(0, (255, 255, 250)), (0.5, (255, 240, 200)), (1, (240, 200, 120))],
+               stroke=int(4 * S), stroke_color=(30, 14, 60), shadow=(0, 5 * S), shadow_blur=6 * S, anchor="ls")
+    return img
+
+
+def host_layer(canvas, height, x, bottom, glow_color=(255, 215, 130)):
+    """Paste the presenter cut-out scaled to `height`, bottom edge at `bottom`, with an edge glow."""
+    host = Image.open(HOST_CUTOUT).convert("RGBA")
+    host = host.crop(host.getbbox())
+    scale = height / host.height
+    host = host.resize((int(host.width * scale), int(height)), Image.LANCZOS)
+    y = int(bottom - host.height)
+    layer = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    layer.alpha_composite(host, (int(x), y))
+    a = layer.getchannel("A")
+    rim = a.filter(ImageFilter.MaxFilter(int(9 * S) | 1))
+    canvas.alpha_composite(glow_layer(rim, glow_color, 34 * S, 1.0))
+    canvas.alpha_composite(glow_layer(rim, (255, 255, 235), 5 * S, 0.9))
+    canvas.alpha_composite(layer)
+
+
+def orbit_arcs(canvas, center, radii, color=(255, 200, 90), tilt=18, width=3):
+    """Glowing elliptical orbit lines like the channel's reference art."""
+    m = Image.new("L", canvas.size, 0)
+    d = ImageDraw.Draw(m)
+    for r, a0, a1 in radii:
+        bb = [center[0] - r, center[1] - r * 0.42, center[0] + r, center[1] + r * 0.42]
+        d.arc(bb, a0, a1, fill=255, width=int(width * S))
+    m = m.rotate(tilt, resample=Image.BICUBIC, center=center)
+    canvas.alpha_composite(glow_layer(m, color, 14 * S, 0.9))
+    canvas.alpha_composite(glow_layer(m, (255, 240, 200), 1.5 * S, 0.9))
+
+
+def variant_d(out):
+    """Channel style: presenter on the left, bevelled headline centre, mascots on the right."""
+    canvas = cosmic_background(seed=41, base=(18, 6, 44), nebula_a=(150, 40, 190), nebula_b=(255, 150, 50),
+                               hot=(1500 * S, 420 * S), hot_color=(255, 150, 50), hot_radius=1100 * S,
+                               hot_strength=0.45, nebula_strength=1.0)
+    # warm gold cloud behind the headline, violet to the left behind the host
+    paste(canvas, radial_glow(700 * S, 100 * S, (255, 140, 40), 0.35, 1.8), (1180 * S - 700 * S, 520 * S - 700 * S))
+    paste(canvas, radial_glow(620 * S, 80 * S, (150, 40, 220), 0.45, 1.6), (330 * S - 620 * S, 560 * S - 620 * S))
+    orbit_arcs(canvas, (1250 * S, 560 * S), [(980 * S, 190, 350), (1180 * S, 200, 330), (820 * S, 10, 150)], tilt=-14)
+
+    # --- Jupiter top-right
+    jc = (1728 * S, 240 * S)
+    jr = 165 * S
+    paste(canvas, radial_glow(jr * 2.0, jr * 0.95, (255, 180, 80), 0.9, 1.8), (jc[0] - jr * 2, jc[1] - jr * 2))
+    paste(canvas, jupiter(jr, seed=21, light=(-0.5, -0.35, 0.78)), (jc[0] - jr - 2, jc[1] - jr - 2))
+
+    # --- Leo sun emblem bottom-right
+    ec = (1668 * S, 800 * S)
+    er = 140 * S
+    paste(canvas, radial_glow(er * 2.6, er, (255, 130, 30), 0.55, 2.0), (ec[0] - er * 2.6, ec[1] - er * 2.6))
+    sun_lion_emblem(canvas, ec, er, rays=20)
+
+    # --- presenter
+    host_layer(canvas, 1120 * S, -20 * S, 1100 * S)
+
+    # --- text block (centre x ~ 1150)
+    cx = 1095 * S
+    date = gold_pill("25th to 31st October 2026", font("Montserratwght.ttf", 52 * S, b"ExtraBold"), 40 * S, 12 * S, tracking=1 * S)
+    paste(canvas, date, (cx - date.width / 2 - 20 * S, 40 * S - 70))
+
+    f1 = font("Montserratwght.ttf", 100 * S, b"Black")
+    bevel_text(canvas, (cx, 250 * S), "Weekly Horoscope", f1,
+               stops=[(0, (255, 255, 255)), (0.5, (255, 248, 225)), (1, (236, 205, 130))],
+               stroke=int(7 * S), stroke_color=(40, 14, 70), glow=(255, 190, 80), glow_radius=26 * S,
+               glow_strength=0.9, anchor="ms", bevel=3, shadow=(0, 8), shadow_blur=10)
+
+    f2 = font("Montserratwght.ttf", 215 * S, b"Black")
+    bevel_text(canvas, (cx - 60 * S, 470 * S), "JUPITER", f2, stops=GOLD_STOPS, stroke=int(10 * S),
+               stroke_color=(70, 26, 0), glow=(255, 170, 40), glow_radius=48 * S, glow_strength=1.0,
+               anchor="ms", bevel=4, shadow=(0, 14), shadow_blur=16)
+
+    f3 = font("Montserratwght.ttf", 150 * S, b"Black")
+    f3b = font("Montserratwght.ttf", 215 * S, b"Black")
+    in_w = f3.getlength("in ")
+    leo_w = f3b.getlength("LEO")
+    total = in_w + leo_w + 40 * S
+    x0 = cx - 60 * S - total / 2
+    bevel_text(canvas, (x0, 690 * S), "in", f3,
+               stops=[(0, (255, 255, 255)), (0.5, (255, 248, 225)), (1, (236, 205, 130))],
+               stroke=int(8 * S), stroke_color=(40, 14, 70), glow=(255, 190, 80), glow_radius=26 * S,
+               glow_strength=0.9, anchor="ls", bevel=3, shadow=(0, 10), shadow_blur=12)
+    bevel_text(canvas, (x0 + in_w + 40 * S, 690 * S), "LEO", f3b, stops=GOLD_STOPS, stroke=int(10 * S),
+               stroke_color=(70, 26, 0), glow=(255, 170, 40), glow_radius=48 * S, glow_strength=1.0,
+               anchor="ls", bevel=4, shadow=(0, 14), shadow_blur=16)
+    tag = gradient_bar("BIG TRANSIT", font("BebasNeue-Regular.ttf", 66 * S), 30 * S, 6 * S, RED_STOPS,
+                       (255, 255, 255, 255), tracking=4 * S, skew=0.18, rotate=-7)
+    paste(canvas, tag, (cx + 330 * S, 268 * S))
+
+    pill_img = navy_pill("For All 12 Signs", font("Montserratwght.ttf", 84 * S, b"ExtraBold"), 56 * S, 10 * S)
+    paste(canvas, pill_img, (cx - pill_img.width / 2 + 10 * S, 822 * S - 70))
+
+    finish(canvas, out)
+
+
+VARIANTS = {"a": variant_a, "b": variant_b, "c": variant_c, "d": variant_d}
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", default="all", help="a, b, c or all")
+    ap.add_argument("--variant", default="all", help="a, b, c, d or all")
     ap.add_argument("--out", default=os.path.join(HERE, "weekly-horoscope-oct25-31"))
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
