@@ -1,0 +1,145 @@
+{
+  "file_number": "001",
+  "title": "If The Elevator Ever Stops On A Floor That Doesn't Exist… DO NOT STEP OUT",
+  "bureau": "OCCUPATIONAL ANOMALY BUREAU",
+  "classification": "FOR EMPLOYEE USE ONLY",
+  "thumbnail_command": "DO NOT STEP OUT",
+  "voice": {
+    "length_scale": 1.32,
+    "noise_scale": 0.45,
+    "noise_w_scale": 0.7,
+    "sentence_silence": 0.55
+  },
+  "segments": [
+    {
+      "id": "cold_open",
+      "scene": "black_title",
+      "pre_pause": 1.2,
+      "lines": [
+        "If the elevator ever stops on a floor that doesn't exist... do not step out."
+      ],
+      "post_pause": 1.5
+    },
+    {
+      "id": "card",
+      "scene": "bureau_card",
+      "pre_pause": 1.4,
+      "lines": [
+        "This file is intended for employees who work after standard hours.",
+        "It contains seven rules. Please follow them in order.",
+        "The Bureau is not responsible for outcomes resulting from rules followed out of order."
+      ],
+      "line_gap": 0.8
+    },
+    {
+      "id": "rule1",
+      "rule": 1,
+      "scene": "directory",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule one. Know how many floors your building has.",
+        "Count them. Write the number down. Keep it in your wallet.",
+        "You will need it when the panel disagrees with you."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule2",
+      "rule": 2,
+      "scene": "doors_open_13",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule two. If the elevator stops and the display shows a number not on your list, remain inside.",
+        "The doors will open. This is normal.",
+        "The hallway will look like your hallway. This is also normal.",
+        "Do not confirm it."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule3",
+      "rule": 3,
+      "scene": "close_button",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule three. Do not press the door close button.",
+        "The button is connected to nothing on this floor.",
+        "Pressing it tells the floor you are in a hurry.",
+        "Floors remember who is in a hurry."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule4",
+      "rule": 4,
+      "scene": "hallway_voice",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule four. If someone on the floor says your name, do not answer.",
+        "Bureau records show that in one hundred percent of cases, the voice was correct about the name.",
+        "In zero percent of cases was it a coworker.",
+        "Answering is considered acceptance of a position on that floor."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule5",
+      "rule": 5,
+      "scene": "countdown",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule five. The doors will close on their own in approximately ninety seconds.",
+        "It will feel longer. Count to ninety out loud.",
+        "If you reach one hundred, begin again from one.",
+        "Do not skip numbers.",
+        "It notices."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule6",
+      "rule": 6,
+      "scene": "face_away",
+      "pre_pause": 2.2,
+      "lines": [
+        "Rule six. When the elevator moves again, do not look at the display.",
+        "It may show your floor. It may show a floor with letters. Press nothing.",
+        "Exit only when the doors open onto a hallway with a fire extinguisher.",
+        "The extra floor has never bothered to install one."
+      ],
+      "post_pause": 1.3,
+      "line_gap": 0.85
+    },
+    {
+      "id": "rule7",
+      "rule": 7,
+      "scene": "directory_13",
+      "pre_pause": 3.0,
+      "silence_before": true,
+      "lines": [
+        "Rule seven. If you followed rules one through six, and you are reading this file at your desk...",
+        "check your floor directory again.",
+        "Count them.",
+        "Write the new number down.",
+        "Keep it in your wallet."
+      ],
+      "line_gap": 1.4,
+      "post_pause": 2.5
+    },
+    {
+      "id": "outro",
+      "scene": "end_of_file",
+      "pre_pause": 2.0,
+      "lines": [
+        "End of file.",
+        "Further training materials are available."
+      ],
+      "post_pause": 3.0
+    }
+  ]
+}
