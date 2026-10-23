@@ -23,3 +23,15 @@ Copy `episodes/001-elevator/episode.json`. Each segment names a `scene`
 (see `SCENES` in `scripts/build_episode.py`) and its spoken `lines`; pauses are
 `pre_pause`, `line_gap`, `post_pause`. `silence_before: true` cuts the bed to
 silence and the picture to black for 1.6 s before that segment.
+
+## Thumbnails (astrology / weekly horoscope)
+
+`thumbnails/make_horoscope_thumbnail.py` renders YouTube thumbnails entirely
+with Pillow + numpy (procedural Jupiter, nebula, zodiac ring, gold text).
+Fonts in `thumbnails/fonts/` are Google Fonts under the SIL Open Font License.
+
+    pip install numpy pillow
+    python3 thumbnails/make_horoscope_thumbnail.py --variant all
+
+Outputs land in `thumbnails/weekly-horoscope-oct25-31/` (1920x1080 PNG and
+1280x720 JPG per variant); `CONCEPTS.md` there explains each layout.
