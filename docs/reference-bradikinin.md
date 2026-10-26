@@ -5,18 +5,28 @@ plus frame strips at 0.25 s steps.
 
 ## Per-video numbers (upload order)
 
-| File | Length | Shots | Median shot | Cuts/min | Glitch shots | Captions on screen |
-|---|---|---|---|---|---|---|
-| Dog stands on two legs | 4:33 | 20 | 10.2 s | 4.4 | 4 | 42 % |
-| GTA 6 | 5:33 | 50 | 5.0 s | 9.0 | 21 | 46 % |
-| Old phone, no SIM | 5:43 | 60 | 3.3 s | 10.5 | 13 | 24 % |
-| Cat watches you sleep | 6:37 | 92 | 3.0 s | 13.9 | 16 | 30 % |
-| Phone charges to 101 % | 4:41 | 46 | 3.9 s | 9.8 | 8 | 32 % |
-| Dog throws the ball | 4:49 | 24 | 6.1 s | 5.0 | 2 | 52 % |
-| Uber drives past | 5:37 | 91 | 2.4 s | 16.2 | 10 | 28 % |
-| Screen time 25 h | 5:09 | 45 | 4.5 s | 8.7 | 7 | 34 % |
-| MrBeast offers money | 8:56 | 183 | 2.3 s | 20.5 | 33 | 25 % |
-| Spider disappears | 5:44 | 54 | 3.8 s | 9.4 | 11 | 45 % |
+"Picture changes" counts hard cuts plus new elements popping into the
+frame. Glitch flashes that revert within 0.4 s are excluded. The first version
+of this table used a fixed threshold that missed most changes on near-black
+frames and wrongly suggested he had sped up from 4 to 20 per minute. The
+corrected detector shows he has been fast from the first file.
+
+| File | Length | Picture changes | Median hold | Per minute |
+|---|---|---|---|---|
+| Dog stands on two legs | 4:33 | 90 | 2.6 s | 19.8 |
+| GTA 6 | 5:33 | 119 | 2.3 s | 21.4 |
+| Old phone, no SIM | 5:43 | 132 | 2.3 s | 23.1 |
+| Cat watches you sleep | 6:37 | 153 | 2.2 s | 23.1 |
+| Phone charges to 101 % | 4:41 | 106 | 2.2 s | 22.7 |
+| Dog throws the ball | 4:49 | 100 | 2.5 s | 20.7 |
+| Uber drives past | 5:37 | 135 | 2.2 s | 24.1 |
+| Screen time 25 h | 5:09 | 120 | 2.2 s | 23.3 |
+| MrBeast offers money | 8:56 | 234 | 2.1 s | 26.2 |
+| Spider disappears | 5:44 | 110 | 2.4 s | 19.2 |
+
+Same detector on the others: Last Soul 17–19 per minute (median hold
+3.0–3.3 s). Our File 001 v1: 10.0 per minute (5.5 s). File 001 v2: 11.7 per
+minute (4.8 s).
 
 Static (locked-off) time is 0–2 % in every file. Audio sits around −19 dB
 median, about 5 dB louder than Last Soul. Narration is chopped into short
@@ -70,10 +80,10 @@ beige background.
 
 ## How the channel evolved
 
-The first file had 4.4 cuts/min with 10 s shots; the ninth had 20.5 cuts/min,
-2.3 s shots and ran almost 9 minutes. Pacing, length and glitch use rise over
-the two weeks. The rule title cards and the progress HUD appear after the
-first file.
+Pacing was already about 20 changes per minute in the first file and rose
+only slightly (26 per minute in the 9-minute MrBeast file). What did change:
+the rule title cards and the progress HUD appear after the first file, and
+the videos get longer.
 
 ## What to adopt, and what to keep different
 

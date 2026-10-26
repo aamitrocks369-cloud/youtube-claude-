@@ -1,0 +1,115 @@
+{
+  "file_number": "001",
+  "title": "If The Elevator Ever Stops On A Floor That Doesn't Exist… DO NOT STEP OUT",
+  "brand": "OAB",
+  "thumbnail_command": "DO NOT STEP OUT",
+  "voice": {
+    "length_scale": 1.32,
+    "noise_scale": 0.45,
+    "noise_w_scale": 0.7,
+    "sentence_silence": 0.55
+  },
+  "segments": [
+    {
+      "id": "cold_open",
+      "pre_pause": 1.2,
+      "post_pause": 1.5,
+      "lines": [
+        {"text": "If the elevator ever stops on a floor that doesn't exist... do not step out.",
+         "shot": "elevator_wide", "args": {"doors": "open", "panel": "13", "you": "inside"}, "glitch": true}
+      ]
+    },
+    {
+      "id": "card",
+      "pre_pause": 1.4,
+      "line_gap": 0.8,
+      "lines": [
+        {"text": "This file is intended for employees who work after standard hours.",
+         "shot": "office_night"},
+        {"text": "It contains seven rules. Please follow them in order.",
+         "shot": "seven_rules"},
+        {"text": "The Bureau is not responsible for outcomes resulting from rules followed out of order.",
+         "shot": "rules_shuffled", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule1", "rule": 1, "rule_name": "COUNT THE FLOORS",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule one. Know how many floors your building has.", "shot": "rule_card"},
+        {"text": "Count them. Write the number down. Keep it in your wallet.", "shot": "directory", "args": {"floors": 12}},
+        {"text": "You will need it when the panel disagrees with you.", "shot": "card_vs_panel", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule2", "rule": 2, "rule_name": "REMAIN INSIDE",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule two. If the elevator stops and the display shows a number not on your list, remain inside.", "shot": "rule_card"},
+        {"text": "The doors will open. This is normal.", "shot": "elevator_wide", "args": {"doors": "opening", "panel": "13", "you": "inside"}},
+        {"text": "The hallway will look like your hallway. This is also normal.", "shot": "hallway_compare"},
+        {"text": "Do not confirm it.", "shot": "elevator_wide", "args": {"doors": "open", "panel": "13", "you": "inside", "x": true}, "glitch": true}
+      ]
+    },
+    {
+      "id": "rule3", "rule": 3, "rule_name": "DO NOT HURRY",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule three. Do not press the door close button.", "shot": "rule_card"},
+        {"text": "The button is connected to nothing on this floor.", "shot": "button_wire"},
+        {"text": "Pressing it tells the floor you are in a hurry.", "shot": "button_press"},
+        {"text": "Floors remember who is in a hurry.", "shot": "building_floors", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule4", "rule": 4, "rule_name": "DO NOT ANSWER",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule four. If someone on the floor says your name, do not answer.", "shot": "rule_card"},
+        {"text": "Bureau records show that in one hundred percent of cases, the voice was correct about the name.", "shot": "stat", "args": {"value": 100, "label": "CORRECT ABOUT THE NAME"}},
+        {"text": "In zero percent of cases was it a coworker.", "shot": "stat", "args": {"value": 0, "label": "WERE A COWORKER", "red": true}},
+        {"text": "Answering is considered acceptance of a position on that floor.", "shot": "org_chart", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule5", "rule": 5, "rule_name": "COUNT OUT LOUD",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule five. The doors will close on their own in approximately ninety seconds.", "shot": "rule_card"},
+        {"text": "It will feel longer. Count to ninety out loud.", "shot": "counter", "args": {"from": 1, "to": 90}},
+        {"text": "If you reach one hundred, begin again from one.", "shot": "counter_loop"},
+        {"text": "Do not skip numbers.", "shot": "number_row"},
+        {"text": "It notices.", "shot": "eye", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule6", "rule": 6, "rule_name": "DO NOT LOOK UP",
+      "pre_pause": 2.2, "post_pause": 1.3, "line_gap": 0.85,
+      "lines": [
+        {"text": "Rule six. When the elevator moves again, do not look at the display.", "shot": "rule_card"},
+        {"text": "It may show your floor. It may show a floor with letters. Press nothing.", "shot": "face_away"},
+        {"text": "Exit only when the doors open onto a hallway with a fire extinguisher.", "shot": "safe_hallway"},
+        {"text": "The extra floor has never bothered to install one.", "shot": "missing_extinguisher", "glitch": true}
+      ]
+    },
+    {
+      "id": "rule7", "rule": 7, "rule_name": "CHECK AGAIN",
+      "pre_pause": 3.0, "silence_before": true, "line_gap": 1.4, "post_pause": 2.5,
+      "lines": [
+        {"text": "Rule seven. If you followed rules one through six, and you are reading this file at your desk...", "shot": "rule_card"},
+        {"text": "check your floor directory again.", "shot": "desk_reading", "glitch": true},
+        {"text": "Count them.", "shot": "directory", "args": {"floors": 13, "red_takeover": true}},
+        {"text": "Write the new number down.", "shot": "card_rewrite", "args": {"red_takeover": true}},
+        {"text": "Keep it in your wallet.", "shot": "wallet", "args": {"red_takeover": true}, "glitch": true}
+      ]
+    },
+    {
+      "id": "outro",
+      "pre_pause": 2.0, "post_pause": 3.0,
+      "lines": [
+        {"text": "End of file.", "shot": "end_card"},
+        {"text": "Further training materials are available.", "shot": "end_card", "args": {"sub": true}}
+      ]
+    }
+  ]
+}

@@ -54,14 +54,18 @@ def decode_small(path, fps=6, w=192, h=108):
     return np.frombuffer(raw, dtype=np.uint8).reshape(n, h, w, 3)
 
 
-def detect_shots(frames, fps, thresh=0.10):
+def detect_shots(frames, fps, thresh=0.02):
     """Cut = big jump in mean absolute difference, relative to local motion."""
     g = frames.astype(np.float32).mean(axis=3) / 255.0
     diff = np.abs(np.diff(g, axis=0)).mean(axis=(1, 2))  # per frame pair
     cuts = [0]
+    k = max(2, int(round(fps * 0.4)))  # a real cut persists; a glitch flash reverts within ~0.4 s
     for i in range(1, len(diff)):
         local = np.median(diff[max(0, i - 6):i]) if i > 1 else 0
-        if diff[i] > thresh and diff[i] > 5 * (local + 0.004):
+        before = g[max(0, i - 1)]
+        after = g[min(len(g) - 1, i + 1 + k)]
+        persists = np.abs(after - before).mean() > 0.5 * diff[i]
+        if diff[i] > thresh and diff[i] > 6 * (local + 0.002) and persists:
             if (i + 1) - cuts[-1] >= int(fps * 0.4):
                 cuts.append(i + 1)
     cuts.append(len(frames))

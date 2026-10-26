@@ -16,7 +16,7 @@ Measured with `scripts/analyze_reference.py` on two uploads:
 | Dominant colours | `#0b0c0f` `#292628` `#4e4d4c` `#8e806f` `#cec2af` | `#48413f` `#2a2626` `#6a5f5a` `#080708` `#95877e` |
 | Audio loudness | −24 dB median, dull (745 Hz centroid) | −23 dB median, 900 Hz centroid |
 
-For comparison, our File 001: median shot 16 s, 3.8 cuts/min, 46 % static.
+With the corrected detector, which also counts in-shot picture changes and ignores glitch flashes, the figure is 17–19 changes per minute (median hold 3.0–3.3 s). Bradikinin measures 19–26 and our File 001 v2 11.7.
 
 ## Technique
 
