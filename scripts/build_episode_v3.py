@@ -346,15 +346,19 @@ def set_hallway(d, t, a):
         if hl == "lights":
             on = t > i * 0.25
         ceiling_light(d, x, 150, on=on and not (dark and i == 2), cone=not dark)
-    elevator_doors(d, 80, 360, 380, label="13", label_col=AMBER)
+    elevator_doors(d, 80, 360, 380, label=a.get("elevator_label", "13"), label_col=AMBER)
     for i, x in enumerate((560, 1000)):
         d.rectangle([x, 380, x + 200, FLOOR], fill=WHITE)
         d.rectangle([x + 26, 410, x + 174, 600], outline=BLACK, width=5)
         d.rectangle([x + 26, 630, x + 174, FLOOR - 30], outline=BLACK, width=5)
         d.ellipse([x + 150, 610, x + 172, 632], fill=BLACK)
         d.rounded_rectangle([x + 60, 330, x + 140, 362], radius=4, outline=GREY, width=3)
+    if a.get("extra_door"):
+        extra_door(d, t, a)
     # extinguisher cabinet
-    if a.get("no_ext"):
+    if a.get("extra_door"):
+        pass
+    elif a.get("no_ext"):
         pulse = 0.5 + 0.5 * math.sin(t * 5)
         for k in range(14):
             ang = k / 14 * 2 * math.pi + t * 0.5
@@ -375,9 +379,43 @@ def set_hallway(d, t, a):
     if hl == "carpet":
         k = ease(t / 0.6)
         d.rectangle([0, FLOOR, W * k, FLOOR + 6], fill=AMBER)
+    if a.get("stranger") == "exit":
+        k = ease((t - 0.4) / 2.2)
+        sx = 1390 - 330 * k
+        pose = walk_pose(t * 8, 0.7) if 0.4 < t < 2.6 else POSES["stand"]
+        rig3(d, sx, FLOOR, 1.3, pose, -1, fill=GREY, face="side")
     act = a.get("you")
     if act:
-        actor(d, t, a, 1180, FLOOR, 1.35, facing=1, face="side")
+        actor(d, t, a, a.get("you_x", 1180) if not a.get("extra_door") else a.get("you_x", 820), FLOOR, 1.35,
+              facing=1, face="side")
+
+
+def extra_door(d, t, a):
+    """A door that was not there yesterday, with a badge reader beside it."""
+    x0, x1, top = 1300, 1480, 380
+    k = ease(t / 0.8) if a.get("door_appear") else 1.0
+    if k <= 0:
+        return
+    of = a.get("door_open", 0.0)
+    if a.get("door_opening"):
+        of = 0.85 * ease((t - 0.6) / 1.4)
+    d.rectangle([x0, top, x1, FLOOR], fill=(4, 4, 4))
+    if a.get("stranger_inside") and of > 0.2:
+        rig3(d, (x0 + x1) / 2 + 20, FLOOR - 10, 0.9, POSES["stand"], -1, fill=fade(GREY, 0.6), face="front")
+    leaf = (x1 - x0) * (1 - of)
+    d.rectangle([x0, top, x0 + leaf, FLOOR], fill=fade((40, 40, 38), k))
+    if leaf > 30:
+        d.ellipse([x0 + leaf - 30, 610, x0 + leaf - 12, 628], fill=fade(GREY, k))
+    d.rectangle([x0 - 10, top - 10, x1 + 10, FLOOR], outline=fade(WHITE, k), width=8)
+    # no number plate, which is how you know
+    rx, ry = 1240, 560
+    d.rounded_rectangle([rx - 22, ry - 40, rx + 22, ry + 40], radius=6, fill=fade(WHITE, k))
+    light = a.get("reader", "green")
+    col = {"green": GREEN, "red": RED, "third": [(170, 120, 255), WHITE, (120, 255, 240)][int(t * 4) % 3],
+           "none": DIM}[light]
+    if light == "green" and int(t * 3) % 2:
+        col = fade(GREEN, 0.5)
+    d.ellipse([rx - 9, ry - 28, rx + 9, ry - 10], fill=col)
 
 
 def set_office(d, t, a):
@@ -421,6 +459,12 @@ def set_office(d, t, a):
     if a.get("door13"):
         k = ease(t / 1.2)
         elevator_doors(d, 120, 380, 420, open_frac=0.12 * k, label="13", label_col=fade(RED, k))
+    if a.get("stranger_at_desk"):
+        k = ease(t / 0.6)
+        pose = breathe(dict(POSES["hold"], head=-6 * k), t, 0.4)
+        rig3(d, 1000, FLOOR, 1.3, pose, 1, fill=GREY, face="front" if t > 1.0 else "side", expr="neutral",
+             prop="card")
+        return
     act = a.get("you", "read")
     tr = 3 * math.sin(t * 38) if a.get("tremble") and t > 0.6 else 0
     if act == "walk_in":
@@ -499,10 +543,10 @@ def beat_card_write(d, img, t, dur, a, ctx):
     for k in range(5):
         d.line([(x + 40, y + 120 + k * 60), (x + w - 40, y + 120 + k * 60)], fill=(170, 190, 220), width=3)
     d.line([(x + 110, y), (x + 110, y + h)], fill=(230, 140, 140), width=3)
-    spaced_text(d, (x + 140, y + 34), "FLOORS IN MY BUILDING", mont(700, 28), GREY, 3)
+    spaced_text(d, (x + 140, y + 34), a.get("label", "FLOORS IN MY BUILDING"), mont(700, 28), GREY, 3)
     f = mont(800, 200)
     if a.get("rewrite"):
-        d.text((x + 170, y + 130), "12", font=f, fill=BLACK)
+        d.text((x + 170, y + 130), a.get("old", "12"), font=f, fill=BLACK)
         sk = ease((t - 0.2) / 0.4)
         thick(d, [(x + 160, y + 240), (x + 160 + 260 * sk, y + 240)], 16, RED)
         start, colr = 0.7, RED
@@ -534,9 +578,11 @@ def beat_wallet(d, img, t, dur, a, ctx):
 def beat_people_row(d, img, t, dur, a, ctx):
     trust = a.get("trust")
     # a panel on the wall that everyone faces
-    d.rounded_rectangle([1500, 220, 1700, 320], radius=10, outline=WHITE, width=6)
-    f = mont(800, 60)
-    d.text((1600 - d.textlength("12", font=f) / 2, 232), "12", font=f, fill=AMBER)
+    panel = a.get("panel", "12")
+    if panel:
+        d.rounded_rectangle([1500, 220, 1700, 320], radius=10, outline=WHITE, width=6)
+        f = mont(800, 60)
+        d.text((1600 - d.textlength(panel, font=f) / 2, 232), panel, font=f, fill=AMBER)
     ground(d, 120, 1800)
     for i in range(9):
         x = 200 + i * 140
@@ -548,6 +594,12 @@ def beat_people_row(d, img, t, dur, a, ctx):
         col = WHITE if counter else (GREY if trust else WHITE)
         rig3(d, x, FLOOR, 0.62 * sc, breathe(pose, t + i, 0.5), 1, col, face="side",
              prop="card" if counter else None)
+    if a.get("extra"):
+        k, sc = appear(t, 1.0, 0.5)
+        if k:
+            rig3(d, 200 + 9 * 140, FLOOR, 0.62 * sc, breathe(POSES["stand"], t, 0.3), -1, fade(GREY, k), face="front")
+            spaced_text(d, (200 + 9 * 140, 470), "+1", mont(800, 44), RED, 4, anchor="m")
+        return
     if trust:
         for i in range(9):
             if i == 2:
@@ -555,8 +607,8 @@ def beat_people_row(d, img, t, dur, a, ctx):
             x = 200 + i * 140
             v2.dotted(d, (x + 20, 560), (1500, 290), color=fade(GREY, 0.6), step=34, r=3, phase=t,
                       upto=ease((t - 0.2) / 0.6))
-    else:
-        spaced_text(d, (480, 470), "1 IN 9", mont(800, 40), YELLOW, 6, anchor="m")
+    elif a.get("label", "1 IN 9"):
+        spaced_text(d, (480, 470), a.get("label", "1 IN 9"), mont(800, 40), YELLOW, 6, anchor="m")
 
 
 def beat_card_vs_panel(d, img, t, dur, a, ctx):
@@ -752,6 +804,78 @@ def beat_counter_loop(d, img, t, dur, a, ctx):
     v2.SHOTS["counter_loop"](d, img, t + (0 if a.get("upto") else 1.1), dur, a, ctx)
 
 
+def badge_face(d, cx, cy, r, expr, fill=WHITE):
+    d.ellipse([cx - r - 6, cy - r - 6, cx + r + 6, cy + r + 6], fill=BLACK)
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=fill)
+    er = r * 0.11 * (1.7 if expr == "wide" else 1.0)
+    for sx in (-1, 1):
+        ex, ey = cx + sx * r * 0.36, cy - r * 0.08
+        d.ellipse([ex - er, ey - er, ex + er, ey + er], fill=BLACK)
+    if expr == "smile":
+        d.arc([cx - r * 0.42, cy - r * 0.15, cx + r * 0.42, cy + r * 0.55], 20, 160, fill=BLACK, width=max(3, int(r * 0.08)))
+
+
+def beat_badge_close(d, img, t, dur, a, ctx):
+    """Employee badge close-up; the photo can change."""
+    y_off = 900 * ease((t - 0.6) / 0.6) if a.get("hide") else 60 * (1 - ease(t / 0.4))
+    x, y, w, h = 460, 230 + y_off, 1000, 600
+    d.line([(960, 0), (900, y + 10)], fill=fade(AMBER, 0.7), width=10)
+    d.line([(960, 0), (1020, y + 10)], fill=fade(AMBER, 0.7), width=10)
+    d.rounded_rectangle([x, y, x + w, y + h], radius=34, fill=WHITE)
+    d.rounded_rectangle([x + 440, y + 26, x + 560, y + 50], radius=10, fill=BLACK)
+    d.rectangle([x, y + 70, x + w, y + 150], fill=(40, 40, 40))
+    spaced_text(d, (x + 50, y + 92), "OAB  ·  STAFF", mont(800, 40), WHITE, 8)
+    d.rectangle([x + 50, y + 190, x + 370, y + 540], fill=(225, 225, 220), outline=BLACK, width=6)
+    expr = a.get("photo", "neutral")
+    if a.get("photo_changes") and t > 1.2:
+        expr = a["photo_changes"]
+    if expr == "blank":
+        d.rectangle([x + 60, y + 200, x + 360, y + 530], fill=(120, 120, 116))
+        spaced_text(d, (x + 210, y + 345), "NO PHOTO", mont(700, 26), BLACK, 3, anchor="m")
+    else:
+        badge_face(d, x + 210, y + 330, 90, expr)
+    if expr != "blank":
+        d.chord([x + 90, y + 430, x + 330, y + 640], 180, 360, fill=WHITE)
+    d.rectangle([x + 50, y + 535, x + 370, y + 545], fill=BLACK)
+    name_col = RED if a.get("name_red") and t > 0.8 else BLACK
+    spaced_text(d, (x + 420, y + 210), "NAME", mont(600, 26), GREY, 4)
+    spaced_text(d, (x + 420, y + 248), a.get("name", "YOU"), mont(800, 64), name_col, 4)
+    spaced_text(d, (x + 420, y + 350), "ACCESS", mont(600, 26), GREY, 4)
+    spaced_text(d, (x + 420, y + 388), a.get("access", "FLOOR 4"), mont(800, 48), BLACK, 4)
+    for k in range(18):
+        bw = 6 if (k * 7) % 3 else 12
+        d.rectangle([x + 420 + k * 26, y + 480, x + 420 + k * 26 + bw, y + 540], fill=BLACK)
+
+
+def beat_badge_reader(d, img, t, dur, a, ctx):
+    """Badge reader close-up: two lights, sometimes a third."""
+    cx, cy = 960, 470
+    d.rounded_rectangle([cx - 230, cy - 330, cx + 230, cy + 330], radius=40, fill=WHITE)
+    d.rounded_rectangle([cx - 170, cy - 60, cx + 170, cy + 240], radius=20, outline=BLACK, width=8)
+    for k in range(4):
+        r = 40 + k * 34
+        d.arc([cx - r, cy + 90 - r, cx + r, cy + 90 + r], 220, 320, fill=GREY, width=8)
+    light = a.get("light", "both")
+    lights = [(cx - 70, GREEN), (cx + 70, RED)]
+    for i, (lx, col) in enumerate(lights):
+        on = light == "both" or (light == "green" and i == 0) or (light == "red" and i == 1)
+        if light == "third":
+            on = False
+        d.ellipse([lx - 34, cy - 250, lx + 34, cy - 182], fill=col if on else (50, 50, 50), outline=BLACK, width=6)
+    if light == "third":
+        col = [(170, 120, 255), WHITE, (120, 255, 240)][int(t * 4) % 3]
+        k, sc = appear(t, 0.3)
+        d.ellipse([cx - 34 * sc, cy - 150 - 34 * sc, cx + 34 * sc, cy - 150 + 34 * sc], fill=col, outline=BLACK, width=6)
+    # badge approaching
+    if a.get("tap"):
+        p = ease(t / 0.8)
+        bx = cx + 420 - 380 * p
+        d.rounded_rectangle([bx - 120, cy - 20, bx + 120, cy + 140], radius=14, fill=(230, 230, 225), outline=BLACK, width=6)
+        if p >= 1:
+            r = 60 + 200 * ease((t - 0.8) / 0.6)
+            d.ellipse([cx - r, cy + 90 - r, cx + r, cy + 90 + r], outline=fade(GREEN, max(0, 1 - (t - 0.8) / 0.6)), width=8)
+
+
 def passthrough(name):
     def f(d, img, t, dur, a, ctx):
         return v2.SHOTS[name](d, img, t, dur, a, ctx)
@@ -945,7 +1069,11 @@ def render_video(plan, path, fps, scale, workers):
 def render_thumbnail(ep, path):
     img = Image.new("RGB", (W, H), BLACK)
     d = ImageDraw.Draw(img)
-    set_elevator(d, 3.0, {"display": "13", "doors": "open", "you": "stand", "beyond": "voice"})
+    sc = ep.get("thumbnail_scene")
+    if sc:
+        BEATS[sc["beat"]](d, img, 3.0, 4.0, sc.get("args", {}), {"rule": None, "rule_name": ""})
+    else:
+        set_elevator(d, 3.0, {"display": "13", "doors": "open", "you": "stand", "beyond": "voice"})
     img = add_glow(img)
     img = img.crop((300, 0, 1620, 742)).resize((W, int(742 * W / 1320)))
     out = Image.new("RGB", (W, H), BLACK)

@@ -1,0 +1,853 @@
+{
+ "file_number": "002",
+ "title": "If Your Badge Ever Opens A Door You've Never Seen… DO NOT GO IN",
+ "brand": "OAB",
+ "thumbnail_command": "DO NOT GO IN",
+ "thumbnail_scene": {
+  "beat": "hallway",
+  "args": {
+   "extra_door": true,
+   "door_open": 0.5,
+   "stranger_inside": true,
+   "reader": "green",
+   "elevator_label": "4",
+   "you": "stand",
+   "you_x": 900
+  }
+ },
+ "segments": [
+  {
+   "id": "cold_open",
+   "pre_pause": 0.8,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "If your badge ever opens a door",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_appear": true,
+      "reader": "green",
+      "elevator_label": "4",
+      "you": "walk_in"
+     }
+    },
+    {
+     "text": "you have never seen before...",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_opening": true,
+      "reader": "green",
+      "elevator_label": "4",
+      "you": "stand",
+      "cam": [
+       1280,
+       560,
+       1.7
+      ]
+     }
+    },
+    {
+     "text": "do not go in.",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_open": 0.85,
+      "reader": "red",
+      "elevator_label": "4",
+      "you": "step_back",
+      "cam": [
+       1100,
+       560,
+       1.3
+      ]
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "intro",
+   "pre_pause": 1.2,
+   "beats": [
+    {
+     "text": "This file is intended",
+     "beat": "office",
+     "args": {
+      "you": "walk_in"
+     }
+    },
+    {
+     "text": "for employees with building access.",
+     "beat": "badge_close"
+    },
+    {
+     "text": "It contains seven rules.",
+     "beat": "seven_rules"
+    },
+    {
+     "text": "Please follow them in order.",
+     "beat": "seven_rules",
+     "args": {
+      "sweep": true
+     }
+    },
+    {
+     "text": "Most doors in this building lead somewhere.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "walk_in",
+      "you_x": 1180
+     }
+    },
+    {
+     "text": "This file is about the other kind.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "extra_door": true,
+      "door_appear": true,
+      "reader": "none",
+      "cam": [
+       1330,
+       560,
+       1.8
+      ]
+     }
+    },
+    {
+     "text": "The Bureau is not responsible",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "for doors that were not there yesterday.",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_appear": true,
+      "reader": "none",
+      "elevator_label": "4",
+      "cam": [
+       1300,
+       560,
+       1.6
+      ]
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule1",
+   "rule": 1,
+   "rule_name": "COUNT THE DOORS",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule one.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "Learn every door on your floor.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "walk_in",
+      "you_x": 1180
+     }
+    },
+    {
+     "text": "Count them on your way in.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "nod",
+      "you_x": 1180,
+      "cam": [
+       800,
+       560,
+       1.4
+      ]
+     }
+    },
+    {
+     "text": "Count them on your way out.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "nod",
+      "you_x": 1180,
+      "cam": [
+       1100,
+       560,
+       1.4
+      ]
+     }
+    },
+    {
+     "text": "Write the number down.",
+     "beat": "card_write",
+     "args": {
+      "number": "6",
+      "label": "DOORS ON MY FLOOR"
+     }
+    },
+    {
+     "text": "Doors do not appear overnight.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "dark": true
+     }
+    },
+    {
+     "text": "Usually.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "dark": true,
+      "extra_door": true,
+      "door_appear": true,
+      "reader": "none",
+      "cam": [
+       1330,
+       560,
+       1.6
+      ]
+     }
+    },
+    {
+     "text": "If the numbers do not match,",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "6",
+       "7"
+      ],
+      "every": 1.0,
+      "red_last": true
+     }
+    },
+    {
+     "text": "you are not on your floor anymore.",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "reader": "none",
+      "elevator_label": "4",
+      "dark": true,
+      "you": "freeze"
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule2",
+   "rule": 2,
+   "rule_name": "READ THE LIGHTS",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule two.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "Your badge reader has two lights.",
+     "beat": "badge_reader",
+     "args": {
+      "light": "both"
+     }
+    },
+    {
+     "text": "Green means open.",
+     "beat": "badge_reader",
+     "args": {
+      "light": "green",
+      "tap": true
+     }
+    },
+    {
+     "text": "Red means closed.",
+     "beat": "badge_reader",
+     "args": {
+      "light": "red"
+     }
+    },
+    {
+     "text": "If it ever shows a third color,",
+     "beat": "badge_reader",
+     "args": {
+      "light": "third"
+     },
+     "glitch": true
+    },
+    {
+     "text": "do not tap again to check.",
+     "beat": "badge_reader",
+     "args": {
+      "light": "third",
+      "tap": true
+     }
+    },
+    {
+     "text": "put your badge away.",
+     "beat": "badge_close",
+     "args": {
+      "hide": true
+     }
+    },
+    {
+     "text": "Slowly.",
+     "beat": "face",
+     "args": {
+      "expr": "worried"
+     }
+    },
+    {
+     "text": "Readers can tell when you are nervous.",
+     "beat": "face",
+     "args": {
+      "expr": "side",
+      "sweat": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule3",
+   "rule": 3,
+   "rule_name": "DO NOT HOLD IT",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule three.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If someone walks out of the new door,",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_open": 0.85,
+      "reader": "green",
+      "elevator_label": "4",
+      "stranger": "exit",
+      "you": "stand",
+      "you_x": 700
+     }
+    },
+    {
+     "text": "do not hold it open for them.",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_open": 0.85,
+      "reader": "green",
+      "elevator_label": "4",
+      "you": "step_back",
+      "you_x": 700,
+      "cam": [
+       900,
+       560,
+       1.4
+      ]
+     }
+    },
+    {
+     "text": "They will be wearing a badge.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "extra_door": true,
+      "door_open": 0.85,
+      "reader": "green",
+      "stranger": "exit",
+      "cam": [
+       1200,
+       500,
+       1.8
+      ]
+     }
+    },
+    {
+     "text": "It will have no photo.",
+     "beat": "badge_close",
+     "args": {
+      "photo": "blank",
+      "name": "—",
+      "access": "ALL FLOORS"
+     }
+    },
+    {
+     "text": "They will thank you anyway.",
+     "beat": "voice_bubble"
+    },
+    {
+     "text": "They will know your name.",
+     "beat": "badge_close",
+     "args": {
+      "name_red": true
+     }
+    },
+    {
+     "text": "You never told them your name.",
+     "beat": "face",
+     "args": {
+      "expr": "wide"
+     },
+     "glitch": true
+    },
+    {
+     "text": "Quick question.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral",
+      "act": "read"
+     }
+    },
+    {
+     "text": "How many doors are on your floor right now?",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "nod",
+      "you_x": 1180,
+      "cam": [
+       960,
+       540,
+       1.2
+      ]
+     }
+    },
+    {
+     "text": "Count them, and tell us in the comments.",
+     "beat": "card_write",
+     "args": {
+      "number": "?",
+      "label": "DOORS ON MY FLOOR"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule4",
+   "rule": 4,
+   "rule_name": "CHECK THE PHOTO",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule four.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "Look at the photo on your badge.",
+     "beat": "badge_close"
+    },
+    {
+     "text": "Every morning.",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "cam": [
+       1050,
+       520,
+       1.5
+      ]
+     }
+    },
+    {
+     "text": "Bureau records show",
+     "beat": "stat",
+     "args": {
+      "value": 40,
+      "label": "PHOTOS CHANGED OVERNIGHT"
+     }
+    },
+    {
+     "text": "that forty percent of photos change overnight.",
+     "beat": "stat",
+     "args": {
+      "value": 40,
+      "label": "PHOTOS CHANGED OVERNIGHT",
+      "hold": true
+     }
+    },
+    {
+     "text": "The changes are small.",
+     "beat": "badge_close",
+     "args": {
+      "photo": "neutral",
+      "photo_changes": "wide"
+     }
+    },
+    {
+     "text": "If the photo is smiling,",
+     "beat": "badge_close",
+     "args": {
+      "photo": "smile"
+     }
+    },
+    {
+     "text": "and you are not,",
+     "beat": "face",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "report to the Compliance Officer.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "Do not smile back.",
+     "beat": "face",
+     "args": {
+      "expr": "wide"
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule5",
+   "rule": 5,
+   "rule_name": "LEAVE ON TIME",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule five.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "The new door only opens after six p.m.",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "clock_fast": true
+     }
+    },
+    {
+     "text": "Leave at five fifty-nine.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "5:58",
+       "5:59"
+      ],
+      "every": 0.9
+     }
+    },
+    {
+     "text": "Set an alarm for five fifty.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "5:50"
+      ],
+      "every": 1
+     }
+    },
+    {
+     "text": "If you work late,",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "tremble": true,
+      "cam": [
+       1050,
+       500,
+       1.6
+      ]
+     }
+    },
+    {
+     "text": "do not use the restroom on your floor.",
+     "beat": "hallway",
+     "args": {
+      "dark": true,
+      "extra_door": true,
+      "door_open": 0.3,
+      "reader": "green",
+      "elevator_label": "4"
+     }
+    },
+    {
+     "text": "Record nineteen.",
+     "beat": "evidence",
+     "args": {
+      "record": 19,
+      "scene": "step_out",
+      "status": "OPEN",
+      "location": "SEATTLE"
+     }
+    },
+    {
+     "text": "An accountant stayed until seven.",
+     "beat": "evidence",
+     "args": {
+      "record": 19,
+      "scene": "step_out",
+      "status": "OPEN",
+      "location": "SEATTLE",
+      "zoom": true
+     }
+    },
+    {
+     "text": "His badge still opens doors in the building.",
+     "beat": "evidence",
+     "args": {
+      "record": 19,
+      "scene": "empty",
+      "status": "ACTIVE",
+      "location": "SEATTLE"
+     }
+    },
+    {
+     "text": "Every night at seven oh four.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "7:03",
+       "7:04"
+      ],
+      "every": 0.8,
+      "red_last": true
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule6",
+   "rule": 6,
+   "rule_name": "DO NOT LOOK IN",
+   "pre_pause": 2.6,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule six.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If the new door is open,",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_open": 0.6,
+      "reader": "green",
+      "elevator_label": "4",
+      "you": "stand",
+      "you_x": 900
+     }
+    },
+    {
+     "text": "do not look inside.",
+     "beat": "hallway",
+     "args": {
+      "extra_door": true,
+      "door_open": 0.6,
+      "reader": "green",
+      "elevator_label": "4",
+      "you": "hunch",
+      "you_x": 900,
+      "cam": [
+       1100,
+       560,
+       1.4
+      ]
+     }
+    },
+    {
+     "text": "The room will look like your office.",
+     "beat": "office",
+     "args": {
+      "you": "read"
+     }
+    },
+    {
+     "text": "Your desk. Your chair. Your monitor.",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "cam": [
+       1150,
+       560,
+       1.7
+      ]
+     }
+    },
+    {
+     "text": "Someone will be sitting in your chair.",
+     "beat": "office",
+     "args": {
+      "stranger_at_desk": true
+     }
+    },
+    {
+     "text": "You will want to see who it is.",
+     "beat": "face",
+     "args": {
+      "expr": "side"
+     }
+    },
+    {
+     "text": "You already know.",
+     "beat": "face",
+     "args": {
+      "expr": "wide"
+     }
+    },
+    {
+     "text": "It will be wearing your badge.",
+     "beat": "badge_close",
+     "args": {
+      "photo": "smile",
+      "name_red": true
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule7",
+   "rule": 7,
+   "rule_name": "COUNT AGAIN",
+   "pre_pause": 3.0,
+   "silence_before": true,
+   "post_pause": 1.8,
+   "beats": [
+    {
+     "text": "Rule seven.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If you followed rules one through six,",
+     "beat": "office",
+     "args": {
+      "you": "read"
+     }
+    },
+    {
+     "text": "count the doors on your floor again.",
+     "beat": "hallway",
+     "args": {
+      "elevator_label": "4",
+      "you": "nod",
+      "you_x": 1180
+     },
+     "glitch": true
+    },
+    {
+     "text": "Six.",
+     "beat": "card_write",
+     "args": {
+      "number": "6",
+      "label": "DOORS ON MY FLOOR"
+     }
+    },
+    {
+     "text": "Good.",
+     "beat": "face",
+     "args": {
+      "expr": "closed"
+     }
+    },
+    {
+     "text": "Now count the employees.",
+     "beat": "people_row",
+     "args": {
+      "red": true,
+      "panel": null,
+      "label": null
+     }
+    },
+    {
+     "text": "There is one more than yesterday.",
+     "beat": "people_row",
+     "args": {
+      "extra": true,
+      "red": true,
+      "panel": null,
+      "label": null
+     },
+     "glitch": true
+    },
+    {
+     "text": "Everyone will be smiling.",
+     "beat": "people_row",
+     "args": {
+      "extra": true,
+      "red": true,
+      "panel": null,
+      "label": null
+     }
+    },
+    {
+     "text": "Do not ask which one.",
+     "beat": "face",
+     "args": {
+      "expr": "wide",
+      "red": true
+     }
+    },
+    {
+     "text": "Welcome to the team.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral",
+      "red": true
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "outro",
+   "pre_pause": 1.8,
+   "post_pause": 2.5,
+   "beats": [
+    {
+     "text": "If your badge stops working tomorrow,",
+     "beat": "badge_reader",
+     "args": {
+      "light": "red",
+      "tap": true
+     }
+    },
+    {
+     "text": "you have been promoted.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     },
+     "glitch": true
+    },
+    {
+     "text": "End of file.",
+     "beat": "end_card"
+    },
+    {
+     "text": "Further training materials are available.",
+     "beat": "end_card",
+     "args": {
+      "sub": true
+     }
+    }
+   ]
+  }
+ ]
+}
