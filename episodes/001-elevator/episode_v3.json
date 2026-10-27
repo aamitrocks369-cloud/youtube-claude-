@@ -1,0 +1,995 @@
+{
+ "file_number": "001",
+ "title": "If The Elevator Ever Stops On A Floor That Doesn't Exist… DO NOT STEP OUT",
+ "brand": "OAB",
+ "thumbnail_command": "DO NOT STEP OUT",
+ "voice": {
+  "length_scale": 1.34,
+  "noise_scale": 0.45,
+  "noise_w_scale": 0.7,
+  "sentence_silence": 0.2
+ },
+ "segments": [
+  {
+   "id": "cold_open",
+   "pre_pause": 0.8,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "If the elevator ever stops",
+     "beat": "elevator",
+     "args": {
+      "display": "11",
+      "doors": "closed",
+      "you": "look_up",
+      "cam": [
+       960,
+       520,
+       1.15
+      ]
+     }
+    },
+    {
+     "text": "on a floor that doesn't exist...",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "12",
+       "13"
+      ],
+      "every": 0.9
+     }
+    },
+    {
+     "text": "do not step out.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "you": "step_back",
+      "x": true
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "intro",
+   "pre_pause": 1.2,
+   "beats": [
+    {
+     "text": "This file is intended",
+     "beat": "office",
+     "args": {
+      "you": "walk_in",
+      "cam": [
+       960,
+       540,
+       1.0
+      ]
+     }
+    },
+    {
+     "text": "for employees who work after standard hours.",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "clock_fast": true,
+      "cam": [
+       1050,
+       520,
+       1.35
+      ]
+     }
+    },
+    {
+     "text": "It contains seven rules.",
+     "beat": "seven_rules"
+    },
+    {
+     "text": "Please follow them in order.",
+     "beat": "seven_rules",
+     "args": {
+      "sweep": true
+     }
+    },
+    {
+     "text": "The Bureau is not responsible",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "for outcomes resulting from rules",
+     "beat": "rules_shuffled"
+    },
+    {
+     "text": "followed out of order.",
+     "beat": "rules_shuffled",
+     "args": {
+      "late": true
+     },
+     "glitch": true
+    },
+    {
+     "text": "Some rules will seem unnecessary.",
+     "beat": "seven_rules",
+     "args": {
+      "sweep": true
+     }
+    },
+    {
+     "text": "They are not.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule1",
+   "rule": 1,
+   "rule_name": "COUNT THE FLOORS",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule one.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "Know how many floors your building has.",
+     "beat": "lobby",
+     "args": {
+      "floors": 12,
+      "you": "walk_in",
+      "cam": [
+       960,
+       520,
+       1.0
+      ]
+     }
+    },
+    {
+     "text": "Count them.",
+     "beat": "lobby",
+     "args": {
+      "floors": 12,
+      "you": "nod",
+      "cam": [
+       1180,
+       470,
+       1.6
+      ]
+     }
+    },
+    {
+     "text": "Write the number down.",
+     "beat": "card_write",
+     "args": {
+      "number": "12"
+     }
+    },
+    {
+     "text": "Keep it in your wallet.",
+     "beat": "wallet",
+     "args": {
+      "number": "12"
+     }
+    },
+    {
+     "text": "Most people never count.",
+     "beat": "people_row"
+    },
+    {
+     "text": "They trust the panel.",
+     "beat": "people_row",
+     "args": {
+      "trust": true
+     }
+    },
+    {
+     "text": "The panel has been wrong before.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "12",
+       "13",
+       "12"
+      ],
+      "every": 0.7
+     }
+    },
+    {
+     "text": "You will need it",
+     "beat": "card_vs_panel",
+     "args": {
+      "stage": 1
+     }
+    },
+    {
+     "text": "when the panel disagrees with you.",
+     "beat": "card_vs_panel",
+     "args": {
+      "stage": 2
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule2",
+   "rule": 2,
+   "rule_name": "REMAIN INSIDE",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule two.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If the elevator stops",
+     "beat": "elevator",
+     "args": {
+      "display": "12",
+      "doors": "closed",
+      "you": "stand"
+     }
+    },
+    {
+     "text": "and the display shows a number not on your list,",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "12",
+       "13"
+      ],
+      "every": 1.1,
+      "red_last": true
+     }
+    },
+    {
+     "text": "remain inside.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "closed",
+      "you": "step_back",
+      "cam": [
+       960,
+       600,
+       1.3
+      ]
+     }
+    },
+    {
+     "text": "The doors will open.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "opening",
+      "you": "stand"
+     }
+    },
+    {
+     "text": "This is normal.",
+     "beat": "face",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "The hallway will look like your hallway.",
+     "beat": "hallway_compare"
+    },
+    {
+     "text": "Same carpet.",
+     "beat": "hallway",
+     "args": {
+      "highlight": "carpet",
+      "cam": [
+       960,
+       800,
+       1.7
+      ]
+     }
+    },
+    {
+     "text": "Same lights.",
+     "beat": "hallway",
+     "args": {
+      "highlight": "lights",
+      "cam": [
+       960,
+       300,
+       1.7
+      ]
+     }
+    },
+    {
+     "text": "Same exit sign.",
+     "beat": "hallway",
+     "args": {
+      "highlight": "exit",
+      "cam": [
+       1660,
+       260,
+       2.2
+      ]
+     }
+    },
+    {
+     "text": "This is also normal.",
+     "beat": "face",
+     "args": {
+      "expr": "side"
+     }
+    },
+    {
+     "text": "Do not confirm it.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "you": "step_back",
+      "x": true,
+      "cam": [
+       960,
+       620,
+       1.25
+      ]
+     },
+     "glitch": true
+    },
+    {
+     "text": "Record seven.",
+     "beat": "evidence",
+     "args": {
+      "record": 7,
+      "scene": "step_out",
+      "status": "CONFIRMED"
+     }
+    },
+    {
+     "text": "A night guard in Ohio confirmed it.",
+     "beat": "evidence",
+     "args": {
+      "record": 7,
+      "scene": "step_out",
+      "status": "CONFIRMED",
+      "zoom": true
+     }
+    },
+    {
+     "text": "He was promoted the same night.",
+     "beat": "evidence",
+     "args": {
+      "record": 7,
+      "scene": "empty",
+      "status": "PROMOTED"
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "rule3",
+   "rule": 3,
+   "rule_name": "DO NOT HURRY",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule three.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "Do not press the door close button.",
+     "beat": "button",
+     "args": {
+      "mode": "hover"
+     }
+    },
+    {
+     "text": "The button is connected to nothing on this floor.",
+     "beat": "button",
+     "args": {
+      "mode": "wire"
+     }
+    },
+    {
+     "text": "Pressing it tells the floor",
+     "beat": "button",
+     "args": {
+      "mode": "press"
+     }
+    },
+    {
+     "text": "you are in a hurry.",
+     "beat": "hallway",
+     "args": {
+      "you": "run",
+      "dark": true
+     }
+    },
+    {
+     "text": "Floors remember who is in a hurry.",
+     "beat": "building_floors",
+     "glitch": true
+    },
+    {
+     "text": "It will be waiting",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "door13": true,
+      "cam": [
+       960,
+       540,
+       1.0
+      ]
+     }
+    },
+    {
+     "text": "on Monday.",
+     "beat": "office",
+     "args": {
+      "you": "freeze",
+      "door13": true,
+      "cam": [
+       500,
+       520,
+       1.8
+      ]
+     }
+    },
+    {
+     "text": "Take the stairs.",
+     "beat": "hallway",
+     "args": {
+      "highlight": "exit",
+      "you": "walk_in",
+      "cam": [
+       1300,
+       500,
+       1.4
+      ]
+     }
+    },
+    {
+     "text": "The stairs have never been reported.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral",
+      "act": "read"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule4",
+   "rule": 4,
+   "rule_name": "DO NOT ANSWER",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule four.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If someone on the floor says your name,",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "beyond": "voice",
+      "you": "stand"
+     }
+    },
+    {
+     "text": "do not answer.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "beyond": "voice",
+      "you": "ears",
+      "cam": [
+       960,
+       600,
+       1.3
+      ]
+     },
+     "glitch": true
+    },
+    {
+     "text": "Not even to say you are busy.",
+     "beat": "face",
+     "args": {
+      "expr": "worried",
+      "sweat": true
+     }
+    },
+    {
+     "text": "It will sound like your manager.",
+     "beat": "voice_bubble"
+    },
+    {
+     "text": "Bureau records show that in one hundred percent of cases,",
+     "beat": "stat",
+     "args": {
+      "value": 100,
+      "label": "CORRECT ABOUT THE NAME"
+     }
+    },
+    {
+     "text": "the voice was correct about the name.",
+     "beat": "stat",
+     "args": {
+      "value": 100,
+      "label": "CORRECT ABOUT THE NAME",
+      "hold": true
+     }
+    },
+    {
+     "text": "In zero percent of cases",
+     "beat": "stat",
+     "args": {
+      "value": 0,
+      "label": "WERE A COWORKER",
+      "red": true
+     }
+    },
+    {
+     "text": "was it a coworker.",
+     "beat": "stat",
+     "args": {
+      "value": 0,
+      "label": "WERE A COWORKER",
+      "red": true,
+      "hold": true
+     }
+    },
+    {
+     "text": "Answering is considered acceptance",
+     "beat": "org_chart"
+    },
+    {
+     "text": "of a position on that floor.",
+     "beat": "org_chart",
+     "args": {
+      "late": true
+     },
+     "glitch": true
+    },
+    {
+     "text": "The Bureau would like to clarify",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "that it is not hiring.",
+     "beat": "officer",
+     "args": {
+      "expr": "worried",
+      "sweat": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule5",
+   "rule": 5,
+   "rule_name": "COUNT OUT LOUD",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule five.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "The doors will close on their own",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "closing_slow",
+      "you": "stand"
+     }
+    },
+    {
+     "text": "in approximately ninety seconds.",
+     "beat": "counter",
+     "args": {
+      "silent": true
+     }
+    },
+    {
+     "text": "It will feel longer.",
+     "beat": "face",
+     "args": {
+      "expr": "side",
+      "sweat": true
+     }
+    },
+    {
+     "text": "Count to ninety out loud.",
+     "beat": "counter"
+    },
+    {
+     "text": "Use your normal voice.",
+     "beat": "face",
+     "args": {
+      "expr": "neutral"
+     }
+    },
+    {
+     "text": "It does not like whispering.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "beyond": "voice",
+      "you": "stand",
+      "cam": [
+       960,
+       520,
+       1.5
+      ]
+     }
+    },
+    {
+     "text": "If you reach one hundred,",
+     "beat": "counter_loop",
+     "args": {
+      "upto": 3
+     }
+    },
+    {
+     "text": "begin again from one.",
+     "beat": "counter_loop"
+    },
+    {
+     "text": "Do not skip numbers.",
+     "beat": "number_row"
+    },
+    {
+     "text": "It notices.",
+     "beat": "eye",
+     "glitch": true
+    },
+    {
+     "text": "Record twelve.",
+     "beat": "evidence",
+     "args": {
+      "record": 12,
+      "scene": "cart",
+      "status": "OPEN",
+      "location": "DENVER"
+     }
+    },
+    {
+     "text": "A cleaner counted to eighty-nine.",
+     "beat": "evidence",
+     "args": {
+      "record": 12,
+      "scene": "cart",
+      "status": "OPEN",
+      "location": "DENVER",
+      "zoom": true
+     }
+    },
+    {
+     "text": "Then she said ninety-one.",
+     "beat": "number_row",
+     "glitch": true
+    },
+    {
+     "text": "Her cart is still on the floor.",
+     "beat": "evidence",
+     "args": {
+      "record": 12,
+      "scene": "cart_empty",
+      "status": "MISSING",
+      "location": "DENVER"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule6",
+   "rule": 6,
+   "rule_name": "DO NOT LOOK UP",
+   "pre_pause": 2.2,
+   "post_pause": 1.2,
+   "beats": [
+    {
+     "text": "Rule six.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "When the elevator moves again,",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "closed",
+      "you": "stand",
+      "moving": true
+     }
+    },
+    {
+     "text": "do not look at the display.",
+     "beat": "elevator",
+     "args": {
+      "display": "??",
+      "doors": "closed",
+      "you": "hunch",
+      "moving": true,
+      "cam": [
+       960,
+       560,
+       1.3
+      ]
+     }
+    },
+    {
+     "text": "It may show your floor.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "7"
+      ],
+      "every": 1
+     }
+    },
+    {
+     "text": "It may show a floor with letters.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "F",
+       "Ø",
+       "BX"
+      ],
+      "every": 0.5
+     },
+     "glitch": true
+    },
+    {
+     "text": "Press nothing.",
+     "beat": "button",
+     "args": {
+      "mode": "withdraw"
+     }
+    },
+    {
+     "text": "Exit only when the doors open",
+     "beat": "elevator",
+     "args": {
+      "display": "4",
+      "doors": "opening",
+      "beyond": "warm",
+      "you": "stand"
+     }
+    },
+    {
+     "text": "onto a hallway with a fire extinguisher.",
+     "beat": "hallway",
+     "args": {
+      "warm": true,
+      "you": "walk_in",
+      "highlight": "ext"
+     }
+    },
+    {
+     "text": "The extra floor",
+     "beat": "hallway",
+     "args": {
+      "dark": true,
+      "no_ext": true,
+      "cam": [
+       1500,
+       560,
+       1.8
+      ]
+     }
+    },
+    {
+     "text": "has never bothered to install one.",
+     "beat": "hallway",
+     "args": {
+      "dark": true,
+      "no_ext": true,
+      "x": true,
+      "cam": [
+       1500,
+       560,
+       2.1
+      ]
+     },
+     "glitch": true
+    },
+    {
+     "text": "If you see no extinguisher,",
+     "beat": "hallway",
+     "args": {
+      "dark": true,
+      "no_ext": true,
+      "cam": [
+       960,
+       540,
+       1.0
+      ]
+     }
+    },
+    {
+     "text": "wait.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "open",
+      "you": "step_back"
+     }
+    },
+    {
+     "text": "The doors will close again.",
+     "beat": "elevator",
+     "args": {
+      "display": "13",
+      "doors": "closing",
+      "you": "stand"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rule7",
+   "rule": 7,
+   "rule_name": "CHECK AGAIN",
+   "pre_pause": 3.0,
+   "silence_before": true,
+   "post_pause": 1.8,
+   "beats": [
+    {
+     "text": "Rule seven.",
+     "beat": "rule_card"
+    },
+    {
+     "text": "If you followed rules one through six,",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "cam": [
+       960,
+       540,
+       1.0
+      ]
+     }
+    },
+    {
+     "text": "and you are reading this file at your desk...",
+     "beat": "office",
+     "args": {
+      "you": "read",
+      "tremble": true,
+      "cam": [
+       1060,
+       470,
+       1.7
+      ]
+     }
+    },
+    {
+     "text": "check your floor directory again.",
+     "beat": "lobby",
+     "args": {
+      "floors": 13,
+      "you": "look_up",
+      "cam": [
+       1180,
+       470,
+       1.5
+      ]
+     },
+     "glitch": true
+    },
+    {
+     "text": "Count them.",
+     "beat": "lobby",
+     "args": {
+      "floors": 13,
+      "you": "nod",
+      "red": true,
+      "cam": [
+       1350,
+       470,
+       1.9
+      ]
+     }
+    },
+    {
+     "text": "Write the new number down.",
+     "beat": "card_write",
+     "args": {
+      "number": "13",
+      "rewrite": true,
+      "red": true
+     }
+    },
+    {
+     "text": "Keep it in your wallet.",
+     "beat": "wallet",
+     "args": {
+      "number": "13",
+      "red": true
+     }
+    },
+    {
+     "text": "Welcome aboard.",
+     "beat": "officer",
+     "args": {
+      "expr": "neutral",
+      "red": true
+     },
+     "glitch": true
+    }
+   ]
+  },
+  {
+   "id": "outro",
+   "pre_pause": 1.8,
+   "post_pause": 2.5,
+   "beats": [
+    {
+     "text": "If this file feels familiar,",
+     "beat": "face",
+     "args": {
+      "expr": "side"
+     }
+    },
+    {
+     "text": "you have read it before.",
+     "beat": "office",
+     "args": {
+      "you": "freeze",
+      "door13": true,
+      "cam": [
+       700,
+       520,
+       1.3
+      ]
+     }
+    },
+    {
+     "text": "On a different floor.",
+     "beat": "display_close",
+     "args": {
+      "seq": [
+       "13"
+      ],
+      "every": 1,
+      "red_last": true
+     },
+     "glitch": true
+    },
+    {
+     "text": "End of file.",
+     "beat": "end_card"
+    },
+    {
+     "text": "Further training materials are available.",
+     "beat": "end_card",
+     "args": {
+      "sub": true
+     }
+    }
+   ]
+  }
+ ]
+}
