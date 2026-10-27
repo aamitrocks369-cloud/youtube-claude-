@@ -100,3 +100,26 @@ uses larger progress boxes. Small fixes.
 | 6 | Kill camera drift; two character actions per line | What moves |
 | 7 | Script to ~4:30 (2 more lines per rule), master to −16 dB | Length, loudness |
 | 8 | Add an evidence-insert format and a narrator character of our own | Missing formats |
+
+## 4. Result after fixes (File 001 v3)
+
+Re-measured with the same tools (`scripts/build_episode_v3.py`,
+`episode_v3.json`). ✓ means inside Bradikinin's range across 10 files.
+
+| Metric | v2 | v3 | Bradikinin median (range) | |
+|---|---|---|---|---|
+| Length | 2:54 | 4:30 | 5:35 (4:33–8:56) | ✗ 3 s short |
+| Picture changes / min | 12.1 | 21.1 | 22.9 (19.2–26.2) | ✓ |
+| Median hold | 4.6 s | 2.4 s | 2.25 s (2.1–2.6) | ✓ |
+| Still-frame share | 14 % | 9 % | 3 % (0–10 %) | ✓ |
+| Ink coverage | 6.3 % | 10.2 % | 12 % (7.3–17.1) | ✓ |
+| Solid white coverage | 2.1 % | 6.2 % | 6.15 % (4.4–9.2) | ✓ |
+| Glow halo ratio | 2.18 | 0.64 | 1.14 (0.67–1.78) | ✗ slightly weak |
+| Frame area used | 0.56 | 0.63 | 0.75 (0.69–0.88) | ✗ |
+| Frames containing red | 40 % | 23 % | 11 % (4–27 %) | ✓ |
+| Yellow pixels | 0.02 % | 0.14 % | 0.15 % | ✓ |
+| Captions on screen | 50 % | 42 % | 33 % (25–52 %) | ✓ |
+| Loudness | −18.6 dB | −16.0 dB | −16.1 dB | ✓ |
+| Pauses ≥ 0.4 s / min | 19.7 | 19.5 | 26.6 (20.2–32.1) | ✗ just under |
+
+9 of 13 are now in range (v2: 3 of 13). The four misses are near-misses.
