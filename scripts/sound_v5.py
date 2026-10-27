@@ -89,7 +89,10 @@ def sfx_footstep():
 
 def sfx_ding():
     p = ((1, 1.0), (2.0, 0.35), (3.01, 0.15))
-    return (tone(1318.5, 1.6, 0.6, partials=p) + 0.8 * np.pad(tone(1046.5, 1.4, 0.6, partials=p), (int(0.18 * SR), 0))[: int(1.6 * SR)]) * 0.35
+    hi = tone(1318.5, 1.6, 0.6, partials=p)
+    lo = np.pad(tone(1046.5, 1.4, 0.6, partials=p), (int(0.18 * SR), 0))
+    lo = np.pad(lo, (0, max(0, len(hi) - len(lo))))[: len(hi)]
+    return (hi + 0.8 * lo) * 0.35
 
 
 def sfx_door_slide(dur=1.6):
