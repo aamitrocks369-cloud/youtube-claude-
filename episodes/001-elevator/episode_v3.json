@@ -132,7 +132,7 @@
    "id": "rule1",
    "rule": 1,
    "rule_name": "COUNT THE FLOORS",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {
@@ -223,7 +223,7 @@
    "id": "rule2",
    "rule": 2,
    "rule_name": "REMAIN INSIDE",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {
@@ -379,7 +379,7 @@
    "id": "rule3",
    "rule": 3,
    "rule_name": "DO NOT HURRY",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {
@@ -473,7 +473,7 @@
    "id": "rule4",
    "rule": 4,
    "rule_name": "DO NOT ANSWER",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {
@@ -587,7 +587,7 @@
    "id": "rule5",
    "rule": 5,
    "rule_name": "COUNT OUT LOUD",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {
@@ -706,7 +706,7 @@
    "id": "rule6",
    "rule": 6,
    "rule_name": "DO NOT LOOK UP",
-   "pre_pause": 2.2,
+   "pre_pause": 2.6,
    "post_pause": 1.2,
    "beats": [
     {

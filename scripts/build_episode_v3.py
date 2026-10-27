@@ -794,7 +794,7 @@ def build_timeline(ep, voice, out_dir):
             beats.append({"seg": si, "start": t, "end": t + dur, **bt})
             last = bi == len(seg["beats"]) - 1
             sentence_end = text.rstrip().endswith((".", "?", "!", "..."))
-            t += dur + (0.0 if last else (0.95 if sentence_end else 0.44))
+            t += dur + (0.0 if last else (1.05 if sentence_end else 0.44))
         t += seg.get("post_pause", 0.0)
         segs.append({"id": seg["id"], "scene": seg["id"], "rule": seg.get("rule"), "start": seg_start, "end": t,
                      "silence_before": seg.get("silence_before", False), "rule_name": seg.get("rule_name", "")})
@@ -854,7 +854,7 @@ def init_worker(plan):
 
 def add_glow(img):
     small = img.resize((W // 4, H // 4), Image.BILINEAR).filter(ImageFilter.GaussianBlur(4))
-    big = ImageEnhance.Brightness(small.resize((W, H), Image.BILINEAR)).enhance(0.42)
+    big = ImageEnhance.Brightness(small.resize((W, H), Image.BILINEAR)).enhance(0.62)
     return ImageChops.add(img, big)
 
 
@@ -900,10 +900,10 @@ def render_frame(i, fps, scale):
         if sh["beat"] in ("rule_card", "end_card"):
             layer = layer.resize((W, H), Image.BILINEAR)
         else:
-            fit = 0.84
+            fit = 0.9
             small = layer.resize((int(W * fit), int(H * fit)), Image.BILINEAR)
             layer = Image.new("RGB", (W, H), BLACK)
-            layer.paste(small, (int(W / 2 - W * fit / 2), int(70)))
+            layer.paste(small, (int(W / 2 - W * fit / 2), int(58)))
         layer = add_glow(layer)
         if sh["args"].get("red"):
             layer = v2.red_takeover(layer)
