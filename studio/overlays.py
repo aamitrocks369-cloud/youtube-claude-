@@ -30,14 +30,61 @@ def clean(text):
     return re.sub(r"\s{2,}", " ", EMOJI.sub("", text)).strip()
 
 
+class MixedFont:
+    """A Devanagari face plus a Latin face of the same size; text is split
+    into runs so Hinglish ("Contacts", "AM", names) renders correctly."""
+
+    def __init__(self, deva, latin, size):
+        self.deva, self.latin, self.size = deva, latin, size
+
+
+LATIN_RUN = re.compile(r"[A-Za-z][A-Za-z'’.\-]*")
+
+
+def _runs(s):
+    out, pos = [], 0
+    for m in LATIN_RUN.finditer(s):
+        if m.start() > pos:
+            out.append((s[pos:m.start()], False))
+        out.append((m.group(), True))
+        pos = m.end()
+    if pos < len(s):
+        out.append((s[pos:], False))
+    return out
+
+
+def length(d, s, f):
+    if not isinstance(f, MixedFont):
+        return d.textlength(s, font=f)
+    return sum(d.textlength(r, font=f.latin if lat else f.deva) for r, lat in _runs(s))
+
+
+def draw_text(d, xy, s, font, **kw):
+    if not isinstance(font, MixedFont):
+        return d.text(xy, s, font=font, **kw)
+    x, y = xy
+    base = y + font.deva.getmetrics()[0]  # share one baseline across both faces
+    for r, lat in _runs(s):
+        f = font.latin if lat else font.deva
+        d.text((x, base), r, font=f, anchor="ls", **kw)
+        x += d.textlength(r, font=f)
+
+
 def font(kind="sans", size=56, bold=True):
-    name = {
+    deva = {
         ("sans", True): "NotoSansDevanagari-Bold.ttf",
         ("sans", False): "NotoSansDevanagari-Regular.ttf",
         ("serif", True): "NotoSerifDevanagari-Bold.ttf",
         ("serif", False): "NotoSerifDevanagari-Regular.ttf",
     }[(kind, bold)]
-    return ImageFont.truetype(os.path.join(FONTS, name), size, layout_engine=ImageFont.Layout.RAQM)
+    latin = {
+        ("sans", True): "NotoSans-Bold.ttf",
+        ("sans", False): "NotoSans-Regular.ttf",
+        ("serif", True): "NotoSerif-Bold.ttf",
+        ("serif", False): "NotoSerif-Regular.ttf",
+    }[(kind, bold)]
+    load = lambda n: ImageFont.truetype(os.path.join(FONTS, n), size, layout_engine=ImageFont.Layout.RAQM)
+    return MixedFont(load(deva), load(latin), size)
 
 
 def ease(x):
@@ -49,7 +96,7 @@ def wrap(d, text, f, max_w):
     words, lines, cur = text.split(), [], ""
     for w in words:
         test = (cur + " " + w).strip()
-        if d.textlength(test, font=f) <= max_w or not cur:
+        if length(d, test, f) <= max_w or not cur:
             cur = test
         else:
             lines.append(cur)
@@ -74,14 +121,14 @@ def caption(img, text, who, alpha, y_frac=0.74):
     col = SPEAKER_COLOURS.get(who, (255, 255, 255))
     a = int(255 * alpha)
     for k, line in enumerate(lines):
-        tw = d.textlength(line, font=f)
+        tw = length(d, line, f)
         x = (W - tw) / 2
-        d.text((x, y + k * lh), line, font=f, fill=(*col, a), stroke_width=7, stroke_fill=(0, 0, 0, int(a * 0.85)))
+        draw_text(d, (x, y + k * lh), line, font=f, fill=(*col, a), stroke_width=7, stroke_fill=(0, 0, 0, int(a * 0.85)))
     if not narr:
         # speaker tag above the caption
         tag = font("sans", 34, bold=True)
         name = who.upper()
-        d.text(((W - d.textlength(name, font=tag)) / 2, y - 52), name, font=tag, fill=(*col, int(a * 0.8)),
+        draw_text(d, ((W - length(d, name, tag)) / 2, y - 52), name, font=tag, fill=(*col, int(a * 0.8)),
                stroke_width=4, stroke_fill=(0, 0, 0, int(a * 0.7)))
     return Image.alpha_composite(img.convert("RGBA"), layer)
 
@@ -95,13 +142,13 @@ def clock(img, text, alpha, corner="top"):
     hm, _, ampm = text.partition(" ")
     f1 = font("sans", 150, bold=False)
     f2 = font("sans", 60, bold=False)
-    w1 = d.textlength(hm, font=f1)
-    w2 = d.textlength(ampm, font=f2)
+    w1 = length(d, hm, f1)
+    w2 = length(d, ampm, f2)
     x = (W - w1 - w2 - 16) / 2
     y = 230 if corner == "top" else H // 2 - 100
     a = int(235 * alpha)
-    d.text((x, y), hm, font=f1, fill=(235, 238, 245, a), stroke_width=3, stroke_fill=(0, 0, 0, a // 3))
-    d.text((x + w1 + 16, y + 70), ampm, font=f2, fill=(235, 238, 245, a))
+    draw_text(d, (x, y), hm, font=f1, fill=(235, 238, 245, a), stroke_width=3, stroke_fill=(0, 0, 0, a // 3))
+    draw_text(d, (x + w1 + 16, y + 70), ampm, font=f2, fill=(235, 238, 245, a))
     return Image.alpha_composite(img.convert("RGBA"), layer)
 
 
@@ -114,11 +161,11 @@ def card(img, text, sub, alpha):
     lh = int(f.size * 1.5)
     y = H // 2 - lh * len(lines) // 2 - (30 if sub else 0)
     for k, line in enumerate(lines):
-        d.text(((W - d.textlength(line, font=f)) / 2, y + k * lh), line, font=f, fill=(238, 236, 230))
+        draw_text(d, ((W - length(d, line, f)) / 2, y + k * lh), line, font=f, fill=(238, 236, 230))
     if sub:
         fs = font("serif", 40, bold=False)
         sub = clean(sub)
-        d.text(((W - d.textlength(sub, font=fs)) / 2, y + lh * len(lines) + 30), sub, font=fs, fill=(170, 168, 160))
+        draw_text(d, ((W - length(d, sub, fs)) / 2, y + lh * len(lines) + 30), sub, font=fs, fill=(170, 168, 160))
     return Image.blend(img.convert("RGBA"), base, alpha)
 
 
@@ -144,13 +191,13 @@ def phone(img, spec, t, alpha):
     _rounded(d, (x0, y0, x0 + pw, y0 + ph), 74, (236, 238, 242, 255))
     # status bar + header
     fs = font("sans", 30, bold=True)
-    d.text((x0 + 60, y0 + 28), spec.get("time", "2:16"), font=fs, fill=(20, 20, 20, 255))
+    draw_text(d, (x0 + 60, y0 + 28), spec.get("time", "2:16"), font=fs, fill=(20, 20, 20, 255))
     _rounded(d, (x0 + pw - 120, y0 + 34, x0 + pw - 60, y0 + 58), 8, None, (20, 20, 20, 255), 3)
     d.rectangle((x0, y0 + 90, x0 + pw, y0 + 200), fill=(250, 250, 252, 255))
     d.ellipse((x0 + 40, y0 + 112, x0 + 106, y0 + 178), fill=(150, 160, 175, 255))
-    d.text((x0 + 126, y0 + 118), clean(spec.get("title", "")), font=font("sans", 40, bold=True), fill=(20, 20, 25, 255))
+    draw_text(d, (x0 + 126, y0 + 118), clean(spec.get("title", "")), font=font("sans", 40, bold=True), fill=(20, 20, 25, 255))
     if spec.get("subtitle"):
-        d.text((x0 + 126, y0 + 160), spec["subtitle"], font=font("sans", 24, bold=False), fill=(110, 110, 120, 255))
+        draw_text(d, (x0 + 126, y0 + 160), spec["subtitle"], font=font("sans", 24, bold=False), fill=(110, 110, 120, 255))
     # bubbles, bottom-up so the newest sits lowest
     fm = font("sans", 36, bold=False)
     fw = font("sans", 24, bold=True)
@@ -160,25 +207,26 @@ def phone(img, spec, t, alpha):
         mine = m.get("from") == "me"
         lines = wrap(d, clean(m["text"]), fm, pw * 0.62)
         bh = len(lines) * 50 + 34 + (30 if m.get("who") else 0)
-        bw = max(d.textlength(line, font=fm) for line in lines) + 48
+        bw = max(length(d, line, fm) for line in lines) + 48
         if m.get("who"):
-            bw = max(bw, d.textlength(m["who"], font=fw) + 48)
+            bw = max(bw, length(d, m["who"], fw) + 48)
         bx = x0 + pw - 40 - bw if mine else x0 + 40
         pop = ease((t - m.get("t", 0)) / 0.18)
         fill = (60, 125, 245, int(255 * pop)) if mine else (255, 255, 255, int(255 * pop))
         _rounded(d, (bx, y, bx + bw, y + bh), 26, fill)
         ty = y + 16
         if m.get("who"):
-            d.text((bx + 24, ty), m["who"], font=fw, fill=(30, 140, 90, int(255 * pop)))
+            draw_text(d, (bx + 24, ty), m["who"], font=fw, fill=(30, 140, 90, int(255 * pop)))
             ty += 30
         for k, line in enumerate(lines):
-            d.text((bx + 24, ty + k * 50), line, font=fm,
+            draw_text(d, (bx + 24, ty + k * 50), line, font=fm,
                    fill=(255, 255, 255, int(255 * pop)) if mine else (25, 25, 30, int(255 * pop)))
         y += bh + 22
-    # hand silhouettes holding the phone
+    # mitten hands gripping the lower corners, thumbs over the edge
     hand = (8, 8, 10, 255)
-    d.ellipse((x0 - 90, y0 + ph - 420, x0 + 90, y0 + ph + 60), fill=hand)
-    d.ellipse((x0 + pw - 90, y0 + ph - 420, x0 + pw + 90, y0 + ph + 60), fill=hand)
-    d.ellipse((x0 + pw - 120, y0 + ph - 520, x0 + pw + 20, y0 + ph - 380), fill=hand)
+    for side in (-1, 1):
+        cx = x0 if side < 0 else x0 + pw
+        d.rounded_rectangle((cx - 95, y0 + ph - 230, cx + 95, y0 + ph + 300), 95, fill=hand)
+        d.ellipse((cx - 45 - side * 22, y0 + ph - 300, cx + 45 - side * 22, y0 + ph - 170), fill=hand)
     out = Image.alpha_composite(base, layer)
     return Image.blend(img.convert("RGBA"), out, min(1.0, alpha * 1.4))
