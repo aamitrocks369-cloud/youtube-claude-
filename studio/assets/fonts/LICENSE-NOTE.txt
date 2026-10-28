@@ -1,0 +1,1 @@
+Noto fonts: SIL Open Font License 1.1 (https://openfontlicense.org). Copied from Debian fonts-noto-core.

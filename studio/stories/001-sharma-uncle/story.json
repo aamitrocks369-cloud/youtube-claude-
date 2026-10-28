@@ -1,0 +1,69 @@
+{
+  "title": "हर रात 2:14 बजे… शर्मा अंकल",
+  "title_en": "Every Night At 2:14… Sharma Uncle",
+  "language": "hi",
+  "aspect": "9:16",
+  "voices": {"narrator": "hf_alpha", "meera": "hf_alpha", "sharma": "hm_psi", "maa": "hf_beta"},
+  "speed": 0.92,
+  "scenes": [
+    {"set": "stairwell", "mood": "night",
+     "actors": [{"who": "meera", "at": "stairs_bottom", "facing": 180, "pose": "stand", "expr": "tired", "prop": "bag",
+                 "actions": [{"t": 0.4, "walk_to": "stair_mid", "dur": 4.0}]}],
+     "camera": {"pos": [0.9, -2.2, 0.7], "look": "meera", "lens": 32, "move": "rise", "amount": 0.08},
+     "overlay": {"type": "clock", "text": "2:14 AM", "from": 0.3, "to": 3.2},
+     "lines": [{"who": "narrator", "text": "हर रात दो बजकर चौदह मिनट पर मैं नाइट शिफ्ट से लौटती हूँ।"}],
+     "min": 4.6},
+
+    {"set": "stairwell", "mood": "night",
+     "actors": [{"who": "sharma", "at": "door_front", "facing": 0, "pose": "stand", "expr": "open",
+                 "actions": [{"t": 1.0, "look": [0, 8]}]},
+                {"who": "meera", "at": "stair_mid", "facing": 180, "pose": "stand", "expr": "tired", "prop": "bag"}],
+     "camera": {"pos": [0.55, 0.3, 1.1], "look": "sharma", "lens": 40, "move": "push", "amount": 0.12},
+     "lines": [{"who": "sharma", "text": "बहुत देर हो गई, बेटा?"}],
+     "min": 2.8},
+
+    {"set": "stairwell", "mood": "night",
+     "actors": [{"who": "meera", "at": "stair_mid", "facing": 180, "pose": "stand", "expr": "tired", "prop": "bag",
+                 "actions": [{"t": 0.3, "turn": 150}, {"t": 0.8, "look": [0, 10]}]}],
+     "camera": {"pos": [0.0, 2.6, 2.4], "look": "meera", "lens": 45, "move": "push", "amount": 0.1},
+     "lines": [{"who": "narrator", "text": "शर्मा अंकल। तीसरी मंज़िल। हर रात, यही एक सवाल।"}],
+     "min": 3.6},
+
+    {"set": "bedroom", "mood": "night",
+     "actors": [{"who": "meera", "at": "bed_sit", "facing": 55, "pose": "sit+phone", "expr": "tired", "prop": "phone"}],
+     "camera": {"pos": [0.3, -1.4, 1.2], "look": "meera", "lens": 45, "move": "push", "amount": 0.12},
+     "lines": [{"who": "narrator", "text": "आज सुबह माँ का मैसेज आया।"}],
+     "min": 2.6},
+
+    {"set": "bedroom", "mood": "night",
+     "actors": [{"who": "meera", "at": "bed_sit", "facing": 55, "pose": "sit+phone", "expr": "tired", "prop": "phone"}],
+     "camera": {"pos": [0.3, -1.4, 1.2], "look": "meera", "lens": 45, "move": "static"},
+     "overlay": {"type": "phone", "from": 0.0, "to": 99,
+                 "spec": {"title": "माँ", "time": "9:12",
+                          "messages": [{"t": 0.3, "from": "them", "text": "बेटा, सोसाइटी ग्रुप देखा?"},
+                                       {"t": 1.6, "from": "them", "text": "आज शर्मा जी की पहली बरसी है 🙏"},
+                                       {"t": 3.2, "from": "them", "text": "पिछले साल इसी दिन, सीढ़ियों पर… रात 2:14 बजे।"}]}},
+     "lines": [],
+     "min": 6.0, "sfx": [{"t": 0.3, "name": "buzz"}, {"t": 1.6, "name": "buzz"}, {"t": 3.2, "name": "buzz"}]},
+
+    {"set": "bedroom", "mood": "night",
+     "actors": [{"who": "meera", "at": "bed_sit", "facing": 55, "pose": "sit+phone", "expr": "open", "prop": "phone",
+                 "actions": [{"t": 0.6, "look": [-25, -6]}]}],
+     "camera": {"pos": [-0.35, -0.55, 0.95], "look": "meera", "lens": 60, "move": "push", "amount": 0.15},
+     "lines": [{"who": "narrator", "text": "पहली बरसी। यानी… एक साल।"}],
+     "min": 3.0, "sfx": [{"t": 0.2, "name": "sting"}]},
+
+    {"card": {"text": "एक साल से…", "sub": "हर रात, कौन पूछ रहा था?"}, "lines": [], "min": 3.0},
+
+    {"set": "stairwell", "mood": "night",
+     "actors": [{"who": "meera", "at": "stairs_bottom", "facing": 180, "pose": "stand", "expr": "sad", "prop": "bag",
+                 "actions": [{"t": 0.3, "walk_to": [0.4, 0.9, 0.3], "dur": 1.8}, {"t": 2.4, "look": [0, 14]}]},
+                {"who": "sharma", "at": "door_front", "facing": 0, "pose": "stand", "expr": "open"}],
+     "camera": {"pos": [0.9, -2.2, 0.7], "look": [0.6, 2.6, 1.9], "lens": 30, "move": "push", "amount": 0.08},
+     "overlay": {"type": "clock", "text": "2:14 AM", "from": 0.2, "to": 2.2},
+     "lines": [{"who": "sharma", "text": "आज भी देर हो गई, बेटा?"}],
+     "line_start": 2.6, "min": 5.0, "sfx": [{"t": 2.4, "name": "sting"}]},
+
+    {"card": {"text": "जवाब मत देना।", "sub": ""}, "lines": [], "min": 2.6, "sfx": [{"t": 0.0, "name": "boom"}]}
+  ]
+}

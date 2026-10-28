@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio</title>
+<style>
+  :root {
+    --bg: #0e0f13; --panel: #171920; --line: #262a35; --text: #e8e8ea; --dim: #9096a3;
+    --accent: #e8543c; --ok: #4cbb7a; --warn: #e0a83a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 18px; margin: 0; letter-spacing: .5px; }
+  header .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  header .sp { flex: 1; }
+  .checks span { font-size: 12px; margin-left: 10px; color: var(--dim); }
+  .checks b.ok { color: var(--ok); } .checks b.no { color: var(--warn); }
+  main { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 56px); }
+  aside { border-right: 1px solid var(--line); padding: 18px; overflow: auto; }
+  section { padding: 22px; overflow: auto; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: 12px; color: var(--dim); margin: 10px 0 4px; text-transform: uppercase; letter-spacing: .6px; }
+  input, select, textarea { width: 100%; background: #0b0c10; color: var(--text); border: 1px solid var(--line);
+                            border-radius: 8px; padding: 9px 10px; font: inherit; }
+  textarea { min-height: 70px; resize: vertical; }
+  .row { display: flex; gap: 10px; } .row > * { flex: 1; }
+  button { background: var(--accent); color: white; border: 0; border-radius: 8px; padding: 10px 14px;
+           font: inherit; font-weight: 600; cursor: pointer; }
+  button.ghost { background: transparent; border: 1px solid var(--line); color: var(--text); }
+  button:disabled { opacity: .45; cursor: default; }
+  .stories .s { padding: 10px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+  .stories .s:hover { background: var(--panel); }
+  .stories .s.on { background: var(--panel); border-color: var(--line); }
+  .stories .t { font-weight: 600; } .stories .m { font-size: 12px; color: var(--dim); }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: #233; color: var(--ok); margin-left: 6px; }
+  .scenes { counter-reset: sc; }
+  .scene { border-left: 3px solid var(--line); padding: 6px 12px; margin: 8px 0; }
+  .scene .h { font-size: 12px; color: var(--dim); }
+  .scene .l { margin: 2px 0; } .scene .who { color: var(--accent); font-weight: 600; margin-right: 6px; }
+  .scene.cardsc { border-color: #555; } .scene.cardsc .l { font-family: serif; font-style: italic; }
+  .grid2 { display: grid; grid-template-columns: minmax(260px, 360px) 1fr; gap: 18px; align-items: start; }
+  video { width: 100%; border-radius: 12px; background: black; aspect-ratio: 9/16; }
+  pre.log { background: #08090c; border: 1px solid var(--line); border-radius: 8px; padding: 10px; height: 170px;
+            overflow: auto; font-size: 12px; color: #b9bfcc; white-space: pre-wrap; margin: 0; }
+  .muted { color: var(--dim); font-size: 13px; }
+  .err { color: #ff8a7a; white-space: pre-wrap; font-size: 13px; }
+  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 12px; width: min(560px, 92vw); }
+  dialog::backdrop { background: rgba(0,0,0,.6); }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; } aside { border-right: 0; } .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="dot"></div><h1>Studio</h1><span class="muted">Hindi 3D stories</span>
+  <div class="sp"></div>
+  <div class="checks" id="checks"></div>
+  <button class="ghost" onclick="openSettings()">Settings</button>
+</header>
+<main>
+  <aside>
+    <div class="card">
+      <label>Title or idea</label>
+      <input id="title" placeholder="हर रात 2:14 बजे… शर्मा अंकल">
+      <div class="row">
+        <div><label>Genre</label>
+          <select id="genre"><option>horror</option><option>crime</option><option>tragedy</option></select></div>
+        <div><label>Length</label>
+          <select id="length"><option value="30">30 s</option><option value="45" selected>45 s</option><option value="60">60 s</option></select></div>
+      </div>
+      <label>Notes for the writer (optional)</label>
+      <textarea id="notes" placeholder="Who is in it, where, the twist you want…"></textarea>
+      <div style="margin-top:12px"><button id="writeBtn" onclick="write_()">Write story</button></div>
+    </div>
+    <label>Your stories</label>
+    <div class="stories" id="stories"></div>
+  </aside>
+  <section id="detail"><p class="muted">Write a new story, or pick one on the left.</p></section>
+</main>
+
+<dialog id="settings">
+  <h3 style="margin-top:0">Settings</h3>
+  <label>Blender program</label><input id="s_blender" placeholder="C:\Program Files\Blender\blender.exe">
+  <label>Voice models folder</label><input id="s_models">
+  <label>Output folder</label><input id="s_output">
+  <label>Render engine</label>
+  <select id="s_engine"><option value="BLENDER_EEVEE_NEXT">EEVEE (fast, needs a graphics card)</option>
+    <option value="CYCLES">Cycles (slower, works anywhere)</option></select>
+  <label>Claude model for writing (optional)</label><input id="s_model" placeholder="leave empty for default">
+  <div class="row" style="margin-top:16px"><button onclick="saveSettings()">Save</button>
+    <button class="ghost" onclick="settings.close()">Cancel</button></div>
+</dialog>
+
+<script>
+let state = null, current = null, currentStory = null, pendingPick = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+
+async function refresh() {
+  state = await api("/api/state");
+  const c = state.checks;
+  $("checks").innerHTML = ["blender","voices","claude","ffmpeg"].map(k =>
+    `<span>${k} <b class="${c[k] ? "ok" : "no"}">${c[k] ? "✓" : "missing"}</b></span>`).join("");
+  $("stories").innerHTML = state.stories.map(s =>
+    `<div class="s ${s.id === current ? "on" : ""}" onclick="pick('${s.id}')">
+       <div class="t">${esc(s.title)}${s.video ? '<span class="badge">video</span>' : ""}</div>
+       <div class="m">${esc(s.title_en)} · ${s.scenes} scenes</div></div>`).join("") || '<p class="muted">No stories yet.</p>';
+  const j = state.job;
+  $("writeBtn").disabled = j.running;
+  if (current) renderJob();
+  if (pendingPick && !j.running) {
+    const id = pendingPick;
+    if (state.stories.some(s => s.id === id)) { pendingPick = null; pick(id); }
+    else if (j.error) pendingPick = null;
+  }
+}
+
+function renderJob() {
+  const j = state.job, box = $("job");
+  if (!box) return;
+  const mine = j.story === current;
+  box.innerHTML = mine && (j.running || j.log.length)
+    ? `<pre class="log">${esc(j.log.join("\n"))}</pre>${j.error ? `<p class="err">${esc(j.error)}</p>` : ""}` : "";
+  const lg = box.querySelector("pre"); if (lg) lg.scrollTop = 1e9;
+  document.querySelectorAll(".makeBtn").forEach(b => b.disabled = j.running);
+  const s = state.stories.find(s => s.id === current);
+  if (s && s.video && !j.running && $("player") && !$("player").src.includes(current)) loadVideo();
+}
+
+async function pick(id) {
+  current = id;
+  const r = await api("/api/story/" + id);
+  currentStory = r.story;
+  const sc = r.story.scenes.map((s, i) => s.card
+    ? `<div class="scene cardsc"><div class="h">${i + 1} · black card</div><div class="l">${esc(s.card.text)} <span class="muted">${esc(s.card.sub)}</span></div></div>`
+    : `<div class="scene"><div class="h">${i + 1} · ${s.set} (${s.mood || ""}) · ${s.actors.map(a => a.who).join(", ")} · camera ${s.camera.move || "push"}${s.overlay ? " · " + s.overlay.type : ""}</div>
+       ${(s.lines || []).map(l => `<div class="l"><span class="who">${esc(l.who)}</span>${esc(l.text)}</div>`).join("")}
+       ${s.overlay && s.overlay.type === "phone" ? s.overlay.spec.messages.map(m => `<div class="l muted">📱 ${esc(m.who || s.overlay.spec.title)}: ${esc(m.text)}</div>`).join("") : ""}</div>`).join("");
+  $("detail").innerHTML = `
+    <h2 style="margin:0 0 4px">${esc(r.story.title)}</h2><p class="muted" style="margin-top:0">${esc(r.story.title_en)}</p>
+    <div class="grid2">
+      <div>
+        <video id="player" controls playsinline></video>
+        <div class="row" style="margin-top:10px">
+          <button class="makeBtn" onclick="make('preview')">Make preview</button>
+          <button class="makeBtn ghost" onclick="make('final')">Make final</button>
+        </div>
+        <p class="muted">Preview ≈ half resolution, quick. Final = full HD, 24 fps.</p>
+        <div id="downloads"></div>
+      </div>
+      <div>
+        <div class="card"><div class="scenes">${sc}</div></div>
+        <details class="card"><summary>Edit story (advanced)</summary>
+          <textarea id="json" style="min-height:320px;font-family:ui-monospace,monospace;font-size:12px">${esc(JSON.stringify(r.story, null, 1))}</textarea>
+          <div style="margin-top:8px"><button onclick="saveStory()">Save changes</button> <span id="saveMsg" class="muted"></span></div>
+        </details>
+        <div class="card"><label style="margin-top:0">Description</label><textarea id="desc" style="min-height:110px">${esc(r.description)}</textarea></div>
+        <div id="job"></div>
+      </div>
+    </div>`;
+  refresh();
+  loadVideo();
+}
+
+function loadVideo() {
+  const s = state && state.stories.find(s => s.id === current);
+  if (!s || !s.video) return;
+  const t = Date.now();
+  $("player").src = `/out/${current}/${current}.mp4?t=${t}`;
+  $("downloads").innerHTML = `<p><a href="/out/${current}/${current}.mp4" download style="color:var(--accent)">Download MP4</a> ·
+    <a href="/out/${current}/thumbnail.jpg" download style="color:var(--accent)">Thumbnail</a></p>`;
+}
+
+async function write_() {
+  try {
+    const r = await api("/api/write", {title: $("title").value, genre: $("genre").value, length: +$("length").value, notes: $("notes").value});
+    current = r.id; pendingPick = r.id;
+    $("detail").innerHTML = `<h2>Writing…</h2><p class="muted">Claude is writing the story. This takes about a minute.</p><div id="job"></div>`;
+    refresh();
+  } catch (e) { alert(e.message); }
+}
+
+async function make(q) {
+  try { await api("/api/make/" + current, {quality: q}); refresh(); } catch (e) { alert(e.message); }
+}
+
+async function saveStory() {
+  try {
+    await api("/api/story/" + current, {story: JSON.parse($("json").value)});
+    $("saveMsg").textContent = "Saved.";
+    pick(current);
+  } catch (e) { $("saveMsg").innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+}
+
+function openSettings() {
+  const s = state.settings;
+  for (const k of ["blender", "models", "output", "engine", "model"]) $("s_" + k).value = s[k] || "";
+  $("settings").showModal();
+}
+async function saveSettings() {
+  const b = {}; for (const k of ["blender", "models", "output", "engine", "model"]) b[k] = $("s_" + k).value;
+  await api("/api/settings", b); $("settings").close(); refresh();
+}
+
+refresh();
+setInterval(refresh, 1500);
+</script>
+</body>
+</html>
