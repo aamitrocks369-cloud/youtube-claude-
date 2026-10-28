@@ -18,6 +18,20 @@ first) rendered in Blender, so every character looks the same in every shot.
 5. **Edit.** Captions in Devanagari, phone-screen overlays, theme cards,
    music and sound effects, then a 9:16 MP4 plus thumbnail and description.
 
+## Install (Windows or Mac)
+
+1. Install **Python 3.11+**, **ffmpeg** and **Claude Code** (`npm install -g @anthropic-ai/claude-code`, then run
+   `claude` once to log in with your Claude account).
+2. Run `python3 studio/setup_studio.py`. It installs the Python packages, downloads Blender 4.5 LTS and the
+   Hindi voice model into `~/.studio`, and checks everything.
+3. Double-click `studio/Studio.command` (Mac) or `studio/Studio.bat` (Windows). The app opens in your browser.
+
+In the app: type a title → **Write story** (about a minute) → read the scenes, edit if you like →
+**Make preview** (quick, half resolution) → **Make final** (full HD, 24 fps). The MP4, thumbnail and a
+description appear next to the player.
+
+![Studio app](app_screenshot.png)
+
 ## Layout
 
 | Path | What |
@@ -30,14 +44,21 @@ first) rendered in Blender, so every character looks the same in every shot.
 | `cast/default.json` | The recurring cast: Ravi, Meera, Papa, Maa, Sharma uncle |
 | `examples/sets/*.json` | Example shots for each set |
 | `blender/test_scene.py` | Smoke test: one character in the bedroom as a 9:16 still |
+| `make_short.py` | Story file → MP4: Hindi voices, Blender renders (cached per scene), overlays, sound, mux |
+| `overlays.py` | Devanagari captions (colour per speaker), clock stamps, phone chats, black theme cards |
+| `catalog.py` | What the engine can render (sets, anchors, poses…) and the story validator |
+| `writer.py` | Title → story via `claude -p`, validated, with one automatic repair round |
+| `app.py`, `ui.html` | The desktop app (local web page) |
+| `setup_studio.py` | One-time installer: packages, Blender, voice model, checks |
+| `stories/*/story.json` | Stories; 001 hand-written, 002 written by the writer |
 
 ## Milestones
 
 - [x] M1 Blender pipeline runs headless; first character and set
 - [x] M2 Shot renderer: keyframed actions (walk, sit, look, blink, phone), camera moves, three Indian sets (bedroom, coaching class, society stairwell)
-- [ ] M3 Story JSON + compositor + Hindi voice → first 45 s Hindi Short end to end
-- [ ] M4 Writer: title → story JSON via `claude -p`
-- [ ] M5 Desktop app page + installer for Windows and Mac
+- [x] M3 Story JSON + compositor + Hindi voice → first 45 s Hindi Short end to end
+- [x] M4 Writer: title → story JSON via `claude -p`
+- [x] M5 Desktop app page + installer for Windows and Mac (needs a real test on your computer)
 - [ ] M6 More styles (Bureau rules files, long-form)
 
 ## Render a shot
