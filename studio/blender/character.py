@@ -26,7 +26,6 @@ FOREARM = 0.19
 THIGH = 0.25
 SHIN = 0.24
 LIMB_R = 0.045
-LID_OPEN = 0.092
 SHOULDER_W = 0.13
 HIP_W = 0.07
 
@@ -114,15 +113,11 @@ def build_character(name, shirt, pants, shoes=(0.08, 0.08, 0.09), accessory=None
     j["neck"] = _empty(f"{name}.neck", j["chest"], (0, 0, TORSO_LEN))
     j["head"] = _empty(f"{name}.head", j["neck"], (0, 0, NECK))
     _sphere(f"{name}.skull", HEAD_R, (0, 0, HEAD_R), j["head"], black, segments=48)
-    # eyes: flattened white ovals on the front (-Y faces camera by default)
-    j["eyes"] = []
-    for side in (-1, 1):
-        eye_root = _empty(f"{name}.eye{side}", j["head"], (side * 0.075, -HEAD_R * 0.9, HEAD_R * 1.08))
-        _sphere(f"{name}.eyeball{side}", 0.04, (0, 0, 0), eye_root, white, scale=(0.72, 0.3, 1.12))
-        # eyelid: a black slab in front of the eye that slides down over it
-        lid = _empty(f"{name}.lid{side}", eye_root, (0, 0, LID_OPEN))
-        _sphere(f"{name}.lidmesh{side}", 0.046, (0, -0.005, 0), lid, black, scale=(0.85, 0.2, 1.0))
-        j["eyes"].append((eye_root, lid))
+    # eyes and eyelids are painted on the skull by its material (see _face_material)
+    skull = bpy.data.objects[f"{name}.skull"]
+    skull.data.materials.clear()
+    mat, j["eyes"] = _face_material(name)
+    skull.data.materials.append(mat)
     # arms
     for side, s in (("L", 1), ("R", -1)):
         sh = _empty(f"{name}.shoulder{side}", j["chest"], (s * SHOULDER_W, 0, TORSO_LEN - 0.05))
@@ -151,11 +146,96 @@ def build_character(name, shirt, pants, shoes=(0.08, 0.08, 0.09), accessory=None
     return j
 
 
+EYE_DIRS = {-1: (-0.366, -0.926, 0.10), 1: (0.366, -0.926, 0.10)}
+EYE_A, EYE_B = 0.030, 0.047  # eye half-width / half-height on the skull (m)
+
+
+def _face_material(name):
+    """Skull material with two white oval eyes and eyelids painted on.
+    Returns (material, [(close_socket, tilt_socket) per eye]). close 0..1
+    moves the lid line from above the eye to below it; tilt rotates it."""
+    m = bpy.data.materials.new(f"{name}_face")
+    m.use_nodes = True
+    nt = m.node_tree
+    N, L = nt.nodes, nt.links
+    bsdf = N["Principled BSDF"]
+    bsdf.inputs["Roughness"].default_value = 0.62
+    if "Specular IOR Level" in bsdf.inputs:
+        bsdf.inputs["Specular IOR Level"].default_value = 0.22
+    tc = N.new("ShaderNodeTexCoord")
+    p = tc.outputs["Object"]
+
+    def vm(op, a, b=None):
+        n = N.new("ShaderNodeVectorMath")
+        n.operation = op
+        L.new(a, n.inputs[0])
+        if b is not None:
+            if isinstance(b, tuple):
+                n.inputs[1].default_value = b
+            else:
+                L.new(b, n.inputs[1])
+        return n.outputs["Value" if op == "DOT_PRODUCT" else "Vector"]
+
+    def fm(op, a, b=None, clamp=False):
+        n = N.new("ShaderNodeMath")
+        n.operation = op
+        n.use_clamp = clamp
+        for k, v in enumerate((a, b)):
+            if v is None:
+                continue
+            if isinstance(v, (int, float)):
+                n.inputs[k].default_value = v
+            else:
+                L.new(v, n.inputs[k])
+        return n.outputs[0]
+
+    # skull object coords are centred on the head sphere (radius HEAD_R)
+    sk = vm("ADD", p, (0, 0, 0))
+    total = None
+    socks = []
+    for side in (-1, 1):
+        d = Vector(EYE_DIRS[side]).normalized()
+        right = Vector((0, 0, 1)).cross(d).normalized() * -1
+        up = d.cross(right).normalized() * -1
+        if up.z < 0:
+            up = -up
+        u = vm("DOT_PRODUCT", sk, tuple(right))
+        v = vm("DOT_PRODUCT", sk, tuple(up))
+        f = vm("DOT_PRODUCT", sk, tuple(d))
+        e = fm("ADD", fm("POWER", fm("DIVIDE", u, EYE_A), 2.0), fm("POWER", fm("DIVIDE", v, EYE_B), 2.0))
+        inside = fm("LESS_THAN", e, 1.0)
+        front = fm("GREATER_THAN", f, 0.0)
+        close = N.new("ShaderNodeValue")
+        close.outputs[0].default_value = 0.0
+        close.label = f"close{side}"
+        tilt = N.new("ShaderNodeValue")
+        tilt.outputs[0].default_value = 0.0
+        tilt.label = f"tilt{side}"
+        # lid line: v + u * tan(tilt) * side  <  B - close * 2B
+        tan = fm("TANGENT", fm("MULTIPLY", tilt.outputs[0], math.pi / 180 * side))
+        vv = fm("ADD", v, fm("MULTIPLY", u, tan))
+        thr = fm("SUBTRACT", EYE_B * 1.05, fm("MULTIPLY", close.outputs[0], EYE_B * 2.2))
+        below = fm("LESS_THAN", vv, thr)
+        mask = fm("MULTIPLY", fm("MULTIPLY", inside, front), below)
+        total = mask if total is None else fm("MAXIMUM", total, mask)
+        socks.append((close.outputs[0], tilt.outputs[0]))
+    mix = N.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    L.new(total, mix.inputs[0])
+    mix.inputs[6].default_value = (0.012, 0.012, 0.014, 1)
+    mix.inputs[7].default_value = (0.95, 0.95, 0.92, 1)
+    L.new(mix.outputs[2], bsdf.inputs["Base Color"])
+    bsdf.inputs["Emission Color"].default_value = (0.95, 0.95, 0.92, 1)
+    em = fm("MULTIPLY", total, 0.35)
+    L.new(em, bsdf.inputs["Emission Strength"])
+    return m, socks
+
+
 def _add_accessory(name, kind, head, mat, black):
     if not kind:
         return
     if kind == "headband":
-        bpy.ops.mesh.primitive_torus_add(major_radius=HEAD_R * 0.93, minor_radius=0.02, location=(0, 0, HEAD_R * 1.4),
+        bpy.ops.mesh.primitive_torus_add(major_radius=HEAD_R * 0.86, minor_radius=0.02, location=(0, 0, HEAD_R * 1.55),
                                          rotation=(math.radians(-8), 0, 0))
         o = bpy.context.object
         o.scale = (1, 1, 1.9)
@@ -224,20 +304,23 @@ def set_pose(j, pose, frame=None, extra=None, seat=0.34):
         j["hips"].keyframe_insert("location", frame=frame)
 
 
-# lid height above the eye centre (0 = closed) and tilt in degrees
-EXPRESSIONS = {"open": (LID_OPEN, 0), "tired": (0.045, 0), "sad": (0.055, 22), "angry": (0.055, -22),
-               "closed": (0.0, 0), "happy": (LID_OPEN, 0)}
+# eyelid closure (0 open, 1 shut) and tilt in degrees (- = sad, + = angry)
+EXPRESSIONS = {"open": (0.0, 0), "happy": (0.0, 0), "tired": (0.45, 0), "sad": (0.3, -16), "angry": (0.32, 18),
+               "closed": (1.0, 0)}
+
+
+def apply_lids(j, close, tilt, frame=None):
+    for close_s, tilt_s in j["eyes"]:
+        close_s.default_value = close
+        tilt_s.default_value = tilt
+        if frame is not None:
+            close_s.keyframe_insert("default_value", frame=frame)
+            tilt_s.keyframe_insert("default_value", frame=frame)
 
 
 def set_expression(j, expr, frame=None):
     """Eyelids: open, tired (half), sad / angry (tilted), closed."""
-    z, tilt = EXPRESSIONS[expr]
-    for k, (eye_root, lid) in enumerate(j["eyes"]):
-        lid.location.z = z
-        lid.rotation_euler.y = math.radians(tilt * (1 if k == 0 else -1))
-        if frame is not None:
-            lid.keyframe_insert("location", frame=frame)
-            lid.keyframe_insert("rotation_euler", frame=frame)
+    apply_lids(j, *EXPRESSIONS[expr], frame=frame)
 
 
 def look_at_point(j, target):

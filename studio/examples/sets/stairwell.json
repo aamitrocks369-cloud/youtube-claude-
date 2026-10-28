@@ -1,0 +1,4 @@
+{"set": "stairwell", "mood": "night", "duration": 3.0,
+ "actors": [{"who": "meera", "at": "stairs_bottom", "facing": 180, "pose": "stand", "expr": "open", "prop": "bag",
+             "actions": [{"t": 0.3, "walk_to": "stair_mid", "dur": 2.5}]}],
+ "camera": {"pos": [0.9, -2.2, 0.7], "look": "meera", "lens": 32, "move": "rise", "amount": 0.1}}

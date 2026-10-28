@@ -1,0 +1,7 @@
+{
+  "ravi":  {"shirt": [0.75, 0.10, 0.08], "pants": [0.10, 0.10, 0.13], "accessory": "headband", "accent": [0.90, 0.10, 0.10], "role": "17, JEE aspirant in Kota"},
+  "meera": {"shirt": [0.85, 0.45, 0.55], "pants": [0.20, 0.22, 0.35], "accessory": "bun", "accent": [0.95, 0.55, 0.30], "hair": "long_hair", "role": "Ravi's elder sister, works night shifts at a call centre"},
+  "papa":  {"shirt": [0.85, 0.85, 0.80], "pants": [0.30, 0.30, 0.32], "accessory": "glasses", "accent": [0.15, 0.12, 0.10], "role": "Father, government clerk"},
+  "maa":   {"shirt": [0.85, 0.40, 0.10], "pants": [0.55, 0.15, 0.20], "accessory": "dupatta", "accent": [0.95, 0.75, 0.20], "hair": "long_hair", "role": "Mother"},
+  "sharma": {"shirt": [0.30, 0.42, 0.30], "pants": [0.25, 0.22, 0.18], "accessory": "cap", "accent": [0.20, 0.25, 0.45], "role": "Neighbour on the 3rd floor, always watching"}
+}

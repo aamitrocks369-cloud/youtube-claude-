@@ -1,0 +1,4 @@
+{"set": "bedroom", "mood": "night", "duration": 3.0,
+ "actors": [{"who": "ravi", "at": "bed_sit", "facing": 55, "pose": "sit+phone", "expr": "tired", "prop": "phone",
+             "actions": [{"t": 1.5, "look": [0, -12]}, {"t": 2.0, "expr": "sad"}]}],
+ "camera": {"pos": [0.3, -1.4, 1.2], "look": "ravi", "lens": 45, "move": "push", "amount": 0.15}}

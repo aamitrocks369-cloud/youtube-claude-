@@ -1,0 +1,1 @@
+{"set": "classroom", "mood": "day", "duration": 3.0, "actors": [{"who": "ravi", "at": "seat_1_1a", "facing": 180, "pose": "sit+sad", "expr": "tired"}, {"who": "sharma", "at": "teacher", "facing": 0, "pose": "stand", "expr": "angry"}], "camera": {"pos": [1.2, -2.6, 1.6], "look": [0.3, 0.8, 0.9], "lens": 30, "move": "drift", "amount": 0.08}}
